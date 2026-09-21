@@ -1,0 +1,26 @@
+.confirm-card {
+  text-align: center;
+  padding: 10vh 5vw;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 26px;
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(255, 25, 114, 0.18),
+      transparent 40%
+    ),
+    #0d1320;
+}
+
+.confirm-card h2 {
+  font-size: clamp(50px, 7vw, 105px);
+  margin: 0 0 24px;
+}
+
+.confirm-card p {
+  max-width: 720px;
+  margin: 0 auto 30px;
+  color: #cbd2dc;
+  font-size: 20px;
+  line-height: 1.5;
+}

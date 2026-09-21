@@ -1,0 +1,80 @@
+.artist-search-field {
+  position: relative;
+}
+
+.artist-search-results {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  max-height: 260px;
+  overflow-y: auto;
+  background: #0d1420;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  padding: 6px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+  list-style: none;
+  margin: 0;
+}
+
+.artist-search-results li {
+  margin: 0;
+}
+
+.artist-search-status {
+  padding: 9px 10px;
+  font-size: 13px;
+  color: #8e98a8;
+}
+
+.artist-search-results button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 7px;
+  background: none;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: #fff;
+}
+
+.artist-search-results button:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.artist-search-results img,
+.artist-search-avatar-fallback {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.artist-search-results button span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.artist-search-results button b {
+  font-size: 13px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.artist-search-results button small {
+  font-size: 11px;
+  color: #8e98a8;
+  text-transform: capitalize;
+}

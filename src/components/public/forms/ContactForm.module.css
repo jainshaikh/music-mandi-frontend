@@ -1,0 +1,139 @@
+.field.full {
+  grid-column: 1/-1;
+}
+
+.sub-nudge {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(255, 122, 61, 0.1);
+  border: 1px solid rgba(255, 122, 61, 0.2);
+  font-size: 12px;
+  color: #ffd3be;
+  display: none;
+}
+
+.sub-nudge.on {
+  display: block;
+}
+
+@media (max-width: 650px) {
+  .field.full {
+    grid-column: auto;
+  }
+}
+
+.dash-panel.full {
+  grid-column: 1/-1;
+}
+
+.seller-account-grid .full {
+  grid-column: 1/-1;
+}
+
+@media (max-width: 900px) {
+  .seller-account-grid .full {
+    grid-column: auto;
+  }
+}
+
+.contact-form-head span {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #ff6f9e;
+}
+
+.contact-form-head h2 {
+  font-size: clamp(32px, 4vw, 54px);
+  line-height: 0.96;
+  letter-spacing: -0.04em;
+  margin: 9px 0;
+}
+
+.contact-form-head p {
+  color: #8f99a9;
+  line-height: 1.5;
+  margin: 0 0 24px;
+}
+
+.contact-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.contact-fields label {
+  font-size: 10px;
+  font-weight: 800;
+  color: #cbd1db;
+}
+
+.contact-fields label.full {
+  grid-column: 1/-1;
+}
+
+.contact-fields input,
+.contact-fields select,
+.contact-fields textarea {
+  width: 100%;
+  display: block;
+  margin-top: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  background: #080d16;
+  color: #fff;
+  padding: 12px;
+  outline: 0;
+}
+
+.contact-fields textarea {
+  min-height: 130px;
+  resize: vertical;
+}
+
+.contact-fields input:focus,
+.contact-fields select:focus,
+.contact-fields textarea:focus {
+  border-color: #ff4f84;
+  box-shadow: 0 0 0 3px rgba(255, 25, 114, 0.08);
+}
+
+.contact-send {
+  margin-top: 18px;
+  min-width: 160px;
+}
+
+.contact-success {
+  padding: 40px 10px;
+  text-align: center;
+}
+
+.contact-success span {
+  font-size: 10px;
+  color: #ff719e;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.contact-success h2 {
+  font-size: 38px;
+  margin: 10px 0;
+}
+
+.contact-success p {
+  color: #98a2b1;
+  margin-bottom: 22px;
+}
+
+@media (max-width: 620px) {
+  .contact-fields {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .contact-fields label.full {
+    grid-column: auto;
+  }
+}

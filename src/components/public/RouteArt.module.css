@@ -1,0 +1,72 @@
+@keyframes float {
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+.route-art {
+  min-height: 420px;
+  border-radius: 30px;
+  /* background:
+    radial-gradient(
+      circle at 50% 45%,
+      rgba(255, 25, 114, 0.36),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 65% 50%,
+      rgba(255, 126, 55, 0.24),
+      transparent 42%
+    ),
+    #0d1321; */
+  /* border: 1px solid rgba(255, 255, 255, 0.09); */
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.route-art .art-disc {
+  width: min(310px, 56%);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff1972, #ff7b3f 60%, #ffb43d);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 40px 100px rgba(255, 25, 114, 0.28);
+  animation: float 5s ease-in-out infinite;
+}
+
+.route-art .art-disc img {
+  width: 72%;
+  height: 72%;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+.route-art:before,
+.route-art:after {
+  content: "";
+  position: absolute;
+  border: 1px solid rgba(255, 25, 114, 0.32);
+  border-radius: 50%;
+  width: 72%;
+  aspect-ratio: 1;
+}
+
+.route-art:after {
+  width: 90%;
+  opacity: 0.45;
+}
+
+@media (max-width: 1000px) {
+  .route-art {
+    min-height: 330px;
+  }
+}
+
+@media (max-width: 650px) {
+  .route-art {
+    min-height: 280px;
+  }
+}

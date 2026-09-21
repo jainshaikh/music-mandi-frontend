@@ -1,0 +1,113 @@
+.date-picker-field {
+  position: relative;
+}
+
+.date-picker-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  background: #090d16;
+  color: #fff;
+  border-radius: 11px;
+  padding: 12px;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.date-picker-trigger .placeholder {
+  color: #6b7383;
+}
+
+.date-picker-trigger svg {
+  flex-shrink: 0;
+  color: #8e98a8;
+}
+
+.date-picker-trigger:focus-visible {
+  border-color: #ff4f84;
+  box-shadow: 0 0 0 3px rgba(255, 25, 114, 0.08);
+  outline: none;
+}
+
+.date-picker-menu {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 280px;
+  background: #0d1420;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+}
+
+.date-picker-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+
+.date-picker-nav button {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+
+.date-picker-nav button:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.date-picker-weekdays,
+.date-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.date-picker-weekdays span {
+  text-align: center;
+  font-size: 10px;
+  color: #8e98a8;
+  padding-bottom: 4px;
+}
+
+.date-picker-day {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.date-picker-day:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.date-picker-day.today {
+  border: 1px solid rgba(255, 79, 132, 0.5);
+}
+
+.date-picker-day.selected {
+  background: linear-gradient(135deg, #ff1972, #ff8a3d);
+  font-weight: 700;
+}
+
+.date-picker-day:disabled {
+  color: #4a4f5c;
+  cursor: not-allowed;
+}

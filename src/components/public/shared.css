@@ -1,0 +1,381 @@
+/*
+ * Genuinely cross-component utility/layout primitives from music_mandi-website
+ * (used by 2+ migrated pages/components). Kept as a plain global stylesheet
+ * on purpose — CSS Modules would give e.g. `.btn` or `.field` a different
+ * hash in every file that references it, breaking compound selectors
+ * (`.tone .btn`, `.field.invalid .multi-select-trigger`, ...) that override
+ * them elsewhere. Scoped under `.mm-public` so it never reaches non-public
+ * pages. See docs/DECISIONS.md DEC-013 for the promotion policy.
+ */
+
+.mm-public .serif {
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+}
+
+.mm-public .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 18px;
+  border: 1px solid currentColor;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.07em;
+  background: transparent;
+  cursor: none;
+  transition: 0.35s var(--mm-ease);
+}
+
+.mm-public .btn.fill {
+  background: var(--mm-ink);
+  color: var(--mm-paper);
+  border-color: var(--mm-ink);
+}
+
+.mm-public .btn.light {
+  background: var(--mm-paper);
+  color: var(--mm-ink);
+  border-color: var(--mm-paper);
+}
+
+.mm-public .btn:hover {
+  transform: translateY(-3px);
+}
+
+.mm-public .eyebrow {
+  font:
+    10px "Courier New",
+    monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.mm-public .btn {
+  border-radius: 9px;
+  padding: 13px 18px;
+  font-weight: 800;
+  letter-spacing: 0.055em;
+}
+
+.mm-public .btn.fill {
+  background: linear-gradient(90deg, var(--mm-brand1), var(--mm-brand2));
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 12px 32px rgba(255, 25, 114, 0.18);
+}
+
+.mm-public .btn.light {
+  background: #fff;
+  color: #090d18;
+  border-color: #fff;
+}
+
+.mm-public .page-shell {
+  min-height: 100svh;
+  padding-top: 106px;
+  background: #080c17;
+}
+
+.mm-public .page-wrap {
+  width: min(1440px, calc(100% - 2 * var(--mm-pad)));
+  margin: auto;
+}
+
+.mm-public .route-kicker {
+  display: inline-block;
+  font:
+    700 10px "Courier New",
+    monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  color: #ff568b;
+}
+
+.mm-public .route-hero2 {
+  min-height: 70vh;
+  padding: 9vh 0 7vh;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.75fr);
+  gap: 8vw;
+  align-items: end;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.mm-public .route-hero2 h1 {
+  font-size: clamp(64px, 9.5vw, 154px);
+  line-height: 0.76;
+  letter-spacing: -0.075em;
+  margin: 14px 0 28px;
+  max-width: 1050px;
+}
+
+.mm-public .route-hero2 p {
+  font-size: clamp(18px, 2vw, 30px);
+  line-height: 1.28;
+  color: #cdd3de;
+  max-width: 650px;
+}
+
+.mm-public .route-hero2 .route-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 32px;
+}
+
+.mm-public .content-section {
+  padding: 10vh 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mm-public .content-section h2 {
+  font-size: clamp(46px, 6.5vw, 100px);
+  line-height: 0.86;
+  letter-spacing: -0.055em;
+  margin: 10px 0 28px;
+  max-width: 1000px;
+}
+
+.mm-public .content-section > p {
+  max-width: 900px;
+  font-size: clamp(18px, 1.65vw, 26px);
+  line-height: 1.55;
+  color: #cbd1db;
+}
+
+.mm-public .brand-gradient {
+  background: linear-gradient(90deg, #ff1972, #ff843d);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.mm-public .form-card {
+  background: #0e1421;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px;
+  padding: clamp(22px, 4vw, 50px);
+  max-width: 1040px;
+}
+
+.mm-public .field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mm-public .field.full {
+  grid-column: 1/-1;
+}
+
+.mm-public .field label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #aeb6c4;
+}
+
+.mm-public .field input,
+.mm-public .field textarea,
+.mm-public .field select {
+  width: 100%;
+  background: #090e18;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  padding: 14px 15px;
+  outline: none;
+}
+
+.mm-public .field input:focus,
+.mm-public .field textarea:focus,
+.mm-public .field select:focus {
+  border-color: #ff4b83;
+  box-shadow: 0 0 0 3px rgba(255, 25, 114, 0.12);
+}
+
+.mm-public .field textarea {
+  min-height: 125px;
+  resize: vertical;
+}
+
+.mm-public .field .helper {
+  font-size: 11px;
+  color: #8e98a8;
+}
+
+.mm-public .field .error {
+  font-size: 11px;
+  color: #ff708f;
+  display: none;
+}
+
+.mm-public .field.invalid .error {
+  display: block;
+}
+
+.mm-public .field.invalid input,
+.mm-public .field.invalid textarea,
+.mm-public .field.invalid select {
+  border-color: #ff4f73;
+}
+
+@media (max-width: 1000px) {
+  .mm-public .route-hero2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 650px) {
+  .mm-public .page-shell {
+    padding-top: 92px;
+  }
+}
+
+@media (max-width: 650px) {
+  .mm-public .route-hero2 {
+    padding-top: 6vh;
+    min-height: auto;
+  }
+}
+
+@media (max-width: 650px) {
+  .mm-public .route-hero2 h1 {
+    font-size: 16vw;
+  }
+}
+
+@media (max-width: 650px) {
+  .mm-public .field.full {
+    grid-column: auto;
+  }
+}
+
+.mm-public .eyebrow,
+.mm-public .route-kicker {
+  font-size: 10px !important;
+  line-height: 1.4 !important;
+  letter-spacing: 0.12em !important;
+  white-space: normal !important;
+  max-width: 100%;
+  margin-bottom: 12px;
+}
+
+.mm-public .route-hero2 h1 {
+  line-height: 0.94 !important;
+  letter-spacing: -0.055em !important;
+  overflow-wrap: normal !important;
+  text-wrap: balance;
+}
+
+.mm-public .route-hero2 h1 {
+  font-size: clamp(54px, 7vw, 110px) !important;
+}
+
+.mm-public .route-hero2 p {
+  font-size: clamp(15px, 1.35vw, 20px) !important;
+  line-height: 1.55 !important;
+  letter-spacing: 0 !important;
+  margin-top: 18px !important;
+  max-width: 680px;
+}
+
+@media (max-width: 700px) {
+  .mm-public .route-hero2 h1 {
+    font-size: 13vw !important;
+    line-height: 0.98 !important;
+  }
+}
+
+.mm-public .route-kicker,
+.mm-public .eyebrow {
+  line-height: 1.35;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.mm-public .flow-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(2, 5, 9, 0.75);
+  backdrop-filter: blur(9px);
+  display: none;
+  place-items: center;
+  padding: 20px;
+}
+
+.mm-public .flow-modal.on {
+  display: grid;
+}
+
+.mm-public .flow-modal-card {
+  width: min(520px, 100%);
+  background: #0b121e;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 22px;
+  padding: 34px;
+  position: relative;
+}
+
+.mm-public .flow-modal-card h3 {
+  font-size: 36px;
+  letter-spacing: -0.04em;
+  margin: 12px 0 25px;
+}
+
+.mm-public .modal-x {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  border: 0;
+  background: none;
+  color: #fff;
+  font-size: 23px;
+}
+
+/* Dark seller-ads/campaign-builder field style — distinct from the marketing
+   `.field` above. Used bare by CampaignBuilder, DatePickerField,
+   CityPickerField, and SellerContactModal. */
+.mm-public .seller-field label,
+.mm-public .seller-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 800;
+  margin-bottom: 7px;
+}
+
+.mm-public .seller-field input,
+.mm-public .seller-field select,
+.mm-public .seller-field textarea {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  background: #090d16;
+  color: #fff;
+  border-radius: 11px;
+  padding: 12px;
+  outline: 0;
+  color-scheme: dark;
+}
+
+.mm-public .seller-field input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
+.mm-public .seller-field input:focus,
+.mm-public .seller-field select:focus,
+.mm-public .seller-field textarea:focus {
+  border-color: #ff4f84;
+  box-shadow: 0 0 0 3px rgba(255, 25, 114, 0.08);
+}
+
+.mm-public .seller-review-card {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #0b101b;
+  border-radius: 12px;
+  padding: 12px;
+}

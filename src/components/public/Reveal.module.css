@@ -1,0 +1,12 @@
+.reveal {
+  opacity: 0;
+  transform: translateY(70px) rotate(1deg);
+  transition:
+    opacity 0.95s var(--mm-ease),
+    transform 0.95s var(--mm-ease);
+}
+
+.reveal.on {
+  opacity: 1;
+  transform: none;
+}

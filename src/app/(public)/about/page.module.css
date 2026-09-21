@@ -1,0 +1,140 @@
+.about-page :global(.route-hero2) {
+  padding: 9vh var(--mm-pad) 7vh;
+}
+
+.about-page :global(.content-section) {
+  padding: 10vh var(--mm-pad);
+}
+
+.copy-wide {
+  max-width: 900px;
+  font-size: clamp(18px, 1.65vw, 26px);
+  line-height: 1.55;
+  color: #cbd1db;
+}
+
+.story-section {
+  text-align: center;
+}
+
+.story-section h2 {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.story-copy {
+  max-width: 850px;
+  margin: auto;
+}
+
+.story-copy p {
+  font-size: clamp(20px, 2vw, 31px);
+  line-height: 1.58;
+  color: #d7dce5;
+  margin: 0 0 2.2em;
+}
+
+.story-copy p.pull {
+  font-size: clamp(38px, 5vw, 78px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: #fff;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  margin-top: 48px;
+}
+
+.info-card {
+  padding: 28px;
+  /* min-height: 240px; */
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.015);
+  transition: 0.35s;
+}
+
+.info-card:hover {
+  background: rgba(255, 25, 114, 0.09);
+}
+
+.info-card b {
+  font-size: 22px;
+  display: block;
+  margin-bottom: 14px;
+}
+
+.info-card p {
+  color: #bfc6d2;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.two-col-copy {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7vw;
+}
+
+.big-quote {
+  padding: 8vh 0;
+  font-size: clamp(44px, 7vw, 112px);
+  line-height: 0.86;
+  letter-spacing: -0.06em;
+}
+
+.partner-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.partner-card {
+  padding: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  background: #0e1421;
+}
+
+.partner-card b {
+  display: block;
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.partner-card-logo {
+  display: block;
+  width: auto;
+  height: 44px;
+  max-width: 100%;
+  object-fit: contain;
+  margin-bottom: 16px;
+}
+
+.partner-card span {
+  color: #aeb6c4;
+}
+
+@media (max-width: 1000px) {
+  .info-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 1000px) {
+  .partner-cards {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 650px) {
+  .info-grid,
+  .partner-cards,
+  .two-col-copy {
+    grid-template-columns: 1fr;
+  }
+}

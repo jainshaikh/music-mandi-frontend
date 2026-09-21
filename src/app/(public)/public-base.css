@@ -1,0 +1,101 @@
+/*
+ * Legacy design tokens + base resets for the migrated public marketing site,
+ * ported from music_mandi-website's globals.css (effective/final cascade —
+ * that file had two :root blocks and two `body` blocks; the values here are
+ * the ones that actually win in the browser today, merged into one place).
+ *
+ * Scoped to `body.mm-public-body` / `.mm-public` so none of it leaks into
+ * the modern Tailwind/shadcn areas of the app (artist/advertiser/admin).
+ * `body.mm-public-body` is toggled by PublicScope (see
+ * src/components/public/PublicScope.tsx) only while a public route is mounted.
+ */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body.mm-public-body {
+  --mm-ink: #070a12;
+  --mm-paper: #f7f4ef;
+  --mm-lime: #ff8a33;
+  --mm-pink: #ff1972;
+  --mm-blue: #6b4dff;
+  --mm-yellow: #ffb23f;
+  --mm-muted: #9ca3af;
+  --mm-brand1: #ff1972;
+  --mm-brand2: #ff7a3d;
+  --mm-brand3: #ffb13b;
+  --mm-navy: #080c17;
+  --mm-card: #101522;
+  --mm-soft: #151b2a;
+  --mm-line: rgba(11, 11, 11, 0.16);
+  --mm-line2: rgba(255, 255, 255, 0.1);
+  --mm-wline: rgba(255, 255, 255, 0.2);
+  --mm-pad: clamp(18px, 2.5vw, 42px);
+  --mm-ease: cubic-bezier(0.2, 0.78, 0.16, 1);
+
+  margin: 0;
+  background: var(--mm-navy);
+  color: #f7f7fb;
+  font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+body.mm-public-body.menu-open {
+  overflow: hidden;
+}
+
+body.mm-public-body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(
+      circle at 15% 15%,
+      rgba(255, 25, 114, 0.11),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 85% 12%,
+      rgba(255, 122, 61, 0.1),
+      transparent 28%
+    ),
+    linear-gradient(180deg, #070a12, #090e19);
+}
+
+.mm-public a,
+.mm-public button,
+.mm-public input {
+  font: inherit;
+  color: inherit;
+}
+
+.mm-public h1,
+.mm-public h2,
+.mm-public h3,
+.mm-public a {
+  overflow-wrap: break-word;
+}
+
+.mm-public ::selection {
+  background: var(--mm-ink);
+  color: var(--mm-lime);
+}
+
+@media (pointer: coarse) {
+  body.mm-public-body {
+    cursor: auto !important;
+  }
+  .mm-public a,
+  .mm-public button {
+    cursor: pointer !important;
+  }
+}
+
+@media (max-width: 950px) {
+  body.mm-public-body {
+    cursor: auto;
+  }
+}
