@@ -47,20 +47,20 @@ export default function HeroCarousel() {
 
   return (
     <section
-      className="relative flex h-screen min-h-170 items-center justify-center overflow-hidden bg-(--mm-navy) text-white max-[620px]:min-h-180 max-[620px]:items-start"
+      className="bg-mm-navy max-mm-sm:min-h-180 max-mm-sm:items-start relative flex h-screen min-h-170 items-center justify-center overflow-hidden text-white"
       id="home"
     >
       <div
-        className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] mask-[linear-gradient(to_bottom,transparent,black_25%,black_70%,transparent)] bg-size-[54px_54px] opacity-70"
+        className="bg-mm-grid absolute inset-0 opacity-70"
         aria-hidden="true"
       />
       <div className="absolute inset-0" id="heroSlides">
         <article
           className={cn(
-            "absolute inset-0 flex items-center overflow-hidden bg-(--mm-ink) px-(--mm-pad) pt-32.5 pb-20 [transition:opacity_0.65s_ease,transform_0.8s_var(--mm-ease)] max-[950px]:pt-29.5 max-[620px]:px-4.5 max-[620px]:pt-27 max-[620px]:pb-19.5",
+            "bg-mm-ink px-mm-gutter transition-mm-slide max-mm-md:pt-29.5 max-mm-sm:px-4.5 max-mm-sm:pt-27 max-mm-sm:pb-19.5 absolute inset-0 flex items-center overflow-hidden pt-32.5 pb-20",
             active === 0
               ? "pointer-events-auto translate-x-0 opacity-100"
-              : "pointer-events-none translate-x-[4%] opacity-0",
+              : "translate-x-mm-slide-shift pointer-events-none opacity-0",
           )}
           data-slide="0"
         >
@@ -76,21 +76,21 @@ export default function HeroCarousel() {
             aria-hidden="true"
             src={VIDEOS[0]}
           />
-          <div className="pointer-events-none absolute inset-0 z-1 bg-[linear-gradient(90deg,rgba(5,7,12,0.9)_0%,rgba(5,7,12,0.72)_36%,rgba(5,7,12,0.3)_67%,rgba(5,7,12,0.16)_100%),linear-gradient(180deg,rgba(5,7,12,0.34),rgba(5,7,12,0.22))] max-[620px]:bg-[linear-gradient(90deg,rgba(5,7,12,0.91),rgba(5,7,12,0.57)),linear-gradient(180deg,rgba(5,7,12,0.16),rgba(5,7,12,0.4))]" />
-          <div className="relative z-2 max-w-[min(800px,58vw)] max-[950px]:max-w-[min(760px,78vw)] max-[620px]:max-w-[94vw]">
-            <h1 className="mt-3.5 mb-6 text-[clamp(64px,8.6vw,142px)] leading-[0.82] tracking-[-0.075em] text-shadow-[0_4px_34px_rgba(0,0,0,0.38)] max-[620px]:text-[50vw]">
+          <div className="bg-mm-hero-shade max-mm-sm:bg-mm-hero-shade-sm pointer-events-none absolute inset-0 z-1" />
+          <div className="max-w-mm-hero-copy max-mm-md:max-w-mm-hero-copy-md max-mm-sm:max-w-mm-hero-copy-sm relative z-2">
+            <h1 className="text-mm-hero leading-mm-hero tracking-mm-hero text-shadow-mm-hero max-mm-sm:text-mm-hero-mobile mt-3.5 mb-6">
               Release.
               <br />
               Track.{" "}
-              <span className="inline-block bg-linear-to-r from-(--mm-brand1) to-(--mm-brand2) bg-clip-text pr-[0.08em] text-transparent">
+              <span className="from-mm-brand-1 to-mm-brand-2 pr-mm-hero-pad inline-block bg-linear-to-r bg-clip-text text-transparent">
                 Get
               </span>
               <br />
-              <span className="inline-block bg-linear-to-r from-(--mm-brand1) to-(--mm-brand2) bg-clip-text pr-[0.08em] text-transparent">
+              <span className="from-mm-brand-1 to-mm-brand-2 pr-mm-hero-pad inline-block bg-linear-to-r bg-clip-text text-transparent">
                 Paid.
               </span>
             </h1>
-            <div className="mt-6.5 flex flex-wrap gap-2.5">
+            <div className="mt-mm-lg flex flex-wrap gap-2.5">
               <Link className="btn fill" href="/artists/submit">
                 Submit Your Music
               </Link>
@@ -100,10 +100,10 @@ export default function HeroCarousel() {
 
         <article
           className={cn(
-            "absolute inset-0 flex items-center overflow-hidden bg-(--mm-ink) px-(--mm-pad) pt-32.5 pb-20 [transition:opacity_0.65s_ease,transform_0.8s_var(--mm-ease)] max-[950px]:pt-29.5 max-[620px]:px-4.5 max-[620px]:pt-27 max-[620px]:pb-19.5",
+            "bg-mm-ink px-mm-gutter transition-mm-slide max-mm-md:pt-29.5 max-mm-sm:px-4.5 max-mm-sm:pt-27 max-mm-sm:pb-19.5 absolute inset-0 flex items-center overflow-hidden pt-32.5 pb-20",
             active === 1
               ? "pointer-events-auto translate-x-0 opacity-100"
-              : "pointer-events-none translate-x-[4%] opacity-0",
+              : "translate-x-mm-slide-shift pointer-events-none opacity-0",
           )}
           data-slide="1"
         >
@@ -119,20 +119,20 @@ export default function HeroCarousel() {
             aria-hidden="true"
             src={VIDEOS[1]}
           />
-          <div className="pointer-events-none absolute inset-0 z-1 bg-[linear-gradient(90deg,rgba(5,7,12,0.9)_0%,rgba(5,7,12,0.72)_36%,rgba(5,7,12,0.3)_67%,rgba(5,7,12,0.16)_100%),linear-gradient(180deg,rgba(5,7,12,0.34),rgba(5,7,12,0.22))] max-[620px]:bg-[linear-gradient(90deg,rgba(5,7,12,0.91),rgba(5,7,12,0.57)),linear-gradient(180deg,rgba(5,7,12,0.16),rgba(5,7,12,0.4))]" />
-          <div className="relative z-2 max-w-[min(800px,58vw)] max-[950px]:max-w-[min(760px,78vw)] max-[620px]:max-w-[94vw]">
-            <h1 className="mt-3.5 mb-6 text-[clamp(64px,8.6vw,142px)] leading-[0.82] tracking-[-0.075em] text-shadow-[0_4px_34px_rgba(0,0,0,0.38)] max-[620px]:text-[15vw]">
+          <div className="bg-mm-hero-shade max-mm-sm:bg-mm-hero-shade-sm pointer-events-none absolute inset-0 z-1" />
+          <div className="max-w-mm-hero-copy max-mm-md:max-w-mm-hero-copy-md max-mm-sm:max-w-mm-hero-copy-sm relative z-2">
+            <h1 className="text-mm-hero leading-mm-hero tracking-mm-hero text-shadow-mm-hero max-mm-sm:text-mm-hero-mobile mt-3.5 mb-6">
               Tamasha. <br />
               Music.{" "}
-              <span className="inline-block bg-linear-to-r from-(--mm-brand1) to-(--mm-brand2) bg-clip-text pr-[0.08em] text-transparent">
+              <span className="from-mm-brand-1 to-mm-brand-2 pr-mm-hero-pad inline-block bg-linear-to-r bg-clip-text text-transparent">
                 A New
               </span>
               <br />
-              <span className="inline-block bg-linear-to-r from-(--mm-brand1) to-(--mm-brand2) bg-clip-text pr-[0.08em] text-transparent">
+              <span className="from-mm-brand-1 to-mm-brand-2 pr-mm-hero-pad inline-block bg-linear-to-r bg-clip-text text-transparent">
                 Record Every
               </span>
               <br />
-              <span className="inline-block bg-linear-to-r from-(--mm-brand1) to-(--mm-brand2) bg-clip-text pr-[0.08em] text-transparent">
+              <span className="from-mm-brand-1 to-mm-brand-2 pr-mm-hero-pad inline-block bg-linear-to-r bg-clip-text text-transparent">
                 Week.
               </span>
             </h1>
@@ -141,10 +141,10 @@ export default function HeroCarousel() {
 
         <article
           className={cn(
-            "absolute inset-0 flex items-center overflow-hidden bg-(--mm-ink) px-(--mm-pad) pt-32.5 pb-20 [transition:opacity_0.65s_ease,transform_0.8s_var(--mm-ease)] max-[950px]:pt-29.5 max-[620px]:px-4.5 max-[620px]:pt-27 max-[620px]:pb-19.5",
+            "bg-mm-ink px-mm-gutter transition-mm-slide max-mm-md:pt-29.5 max-mm-sm:px-4.5 max-mm-sm:pt-27 max-mm-sm:pb-19.5 absolute inset-0 flex items-center overflow-hidden pt-32.5 pb-20",
             active === 2
               ? "pointer-events-auto translate-x-0 opacity-100"
-              : "pointer-events-none translate-x-[4%] opacity-0",
+              : "translate-x-mm-slide-shift pointer-events-none opacity-0",
           )}
           data-slide="2"
         >
@@ -160,16 +160,16 @@ export default function HeroCarousel() {
             aria-hidden="true"
             src={VIDEOS[2]}
           />
-          <div className="pointer-events-none absolute inset-0 z-1 bg-[linear-gradient(90deg,rgba(5,7,12,0.9)_0%,rgba(5,7,12,0.72)_36%,rgba(5,7,12,0.3)_67%,rgba(5,7,12,0.16)_100%),linear-gradient(180deg,rgba(5,7,12,0.34),rgba(5,7,12,0.22))] max-[620px]:bg-[linear-gradient(90deg,rgba(5,7,12,0.91),rgba(5,7,12,0.57)),linear-gradient(180deg,rgba(5,7,12,0.16),rgba(5,7,12,0.4))]" />
-          <div className="relative z-2 max-w-[min(800px,58vw)] max-[950px]:max-w-[min(760px,78vw)] max-[620px]:max-w-[94vw]">
-            <h1 className="mt-3.5 mb-6 text-[clamp(64px,8.6vw,142px)] leading-[0.82] tracking-[-0.075em] text-shadow-[0_4px_34px_rgba(0,0,0,0.38)] max-[620px]:text-[15vw]">
+          <div className="bg-mm-hero-shade max-mm-sm:bg-mm-hero-shade-sm pointer-events-none absolute inset-0 z-1" />
+          <div className="max-w-mm-hero-copy max-mm-md:max-w-mm-hero-copy-md max-mm-sm:max-w-mm-hero-copy-sm relative z-2">
+            <h1 className="text-mm-hero leading-mm-hero tracking-mm-hero text-shadow-mm-hero max-mm-sm:text-mm-hero-mobile mt-3.5 mb-6">
               TELE ADs.
-              <span className="inline-block bg-linear-to-r from-(--mm-brand1) to-(--mm-brand2) bg-clip-text pr-[0.08em] text-transparent">
+              <span className="from-mm-brand-1 to-mm-brand-2 pr-mm-hero-pad inline-block bg-linear-to-r bg-clip-text text-transparent">
                 {" "}
                 Own the Seconds Before Hello.
               </span>
             </h1>
-            <div className="mt-6.5 flex flex-wrap gap-2.5">
+            <div className="mt-mm-lg flex flex-wrap gap-2.5">
               <Link className="btn fill" href="/tele-ads/create">
                 Create a Campaign
               </Link>
@@ -178,23 +178,23 @@ export default function HeroCarousel() {
         </article>
       </div>
 
-      <div className="absolute right-(--mm-pad) bottom-6.5 left-(--mm-pad) z-8 flex items-center justify-end gap-3.5">
+      <div className="right-mm-gutter left-mm-gutter bottom-mm-lg absolute z-8 flex items-center justify-end gap-3.5">
         <button
-          className="h-9.5 w-9.5 rounded-full border border-white/20 bg-[rgba(10,12,20,0.6)] text-white"
+          className="bg-mm-hero-btn h-mm-chrome-top-sm w-mm-chrome-top-sm rounded-full border border-white/20 text-white"
           id="heroPrev"
           aria-label="Previous banner"
           onClick={() => show(active - 1)}
         >
           &larr;
         </button>
-        <div className="flex gap-1.75">
+        <div className="gap-mm-2xs flex">
           {Array.from({ length: SLIDE_COUNT }).map((_, i) => (
             <button
               key={i}
               className={cn(
-                "h-2 w-2 rounded-full border-0 bg-[#555] p-0 text-white",
+                "bg-mm-dot h-2 w-2 rounded-full border-0 p-0 text-white",
                 active === i &&
-                  "w-7 rounded-[20px] bg-linear-to-r from-(--mm-brand1) to-(--mm-brand2)",
+                  "rounded-mm-pill from-mm-brand-1 to-mm-brand-2 w-7 bg-linear-to-r",
               )}
               aria-label={`Show slide ${i + 1}`}
               onClick={() => show(i)}
@@ -202,7 +202,7 @@ export default function HeroCarousel() {
           ))}
         </div>
         <button
-          className="h-9.5 w-9.5 rounded-full border border-white/20 bg-[rgba(10,12,20,0.6)] text-white"
+          className="bg-mm-hero-btn h-mm-chrome-top-sm w-mm-chrome-top-sm rounded-full border border-white/20 text-white"
           id="heroNext"
           aria-label="Next banner"
           onClick={() => show(active + 1)}

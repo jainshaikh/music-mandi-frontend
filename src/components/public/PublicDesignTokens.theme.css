@@ -1,0 +1,261 @@
+/*
+ * Named Tailwind theme tokens + custom utilities shared across the public
+ * site's migrated components (chrome — SplashScreen/AnnouncementBar/Nav/
+ * CustomCursor — plus home-page components like HeroCarousel), so their
+ * markup can use real Tailwind classes (no `w-[309px]`-style arbitrary
+ * values, no `bg-(--css-var)` shorthand) while staying pixel-identical to
+ * the legacy design they were ported from. Values that already land on
+ * Tailwind's default scale are used directly (e.g. `py-3.5` for 14px, or a
+ * plain dynamic value like `pt-32.5` — Tailwind v4 generates spacing-scale
+ * utilities for any decimal on demand, confirmed via the compiled
+ * stylesheet, not just the classic quarter-step presets). Everything
+ * registered here is a value Tailwind has no built-in name for (exact
+ * legacy colors, one-off pixel/vw sizes, cubic-bezier easing, compound
+ * multi-property transitions, multi-stop gradients).
+ *
+ * Named `PublicDesignTokens` rather than `PublicChrome` (its original,
+ * chrome-only scope) once HeroCarousel needed the same shared tokens
+ * (`--color-mm-ink`, `--breakpoint-mm-sm`, etc.) — a component's own
+ * one-off values still belong in a comment-labeled section below, not a
+ * separate per-component file, so a second component doesn't have to
+ * duplicate a breakpoint or color another one already registered.
+ *
+ * `--color-mm-ink`/`--color-mm-paper`/`--color-mm-brand-*` mirror the
+ * `--mm-*` custom properties `public-base.css` defines on `body.mm-public-body`
+ * (see docs/LEGACY_MIGRATION.md) — they resolve to the same values, just
+ * exposed under Tailwind's `--color-*` theme namespace so `bg-mm-ink`,
+ * `bg-mm-ink/74` (opacity modifier), etc. work.
+ *
+ * This must be `@theme inline`, not plain `@theme`: a plain `@theme` also
+ * mirrors every key to a `:root`-level custom property, and resolves each
+ * key's own `var(--mm-*)` reference *there* — but `--mm-*` only exists on
+ * `body.mm-public-body` and below, never at `:root`, so that resolution
+ * permanently fails and every element inherits the already-broken value.
+ * `inline` instead substitutes each value directly into the utility classes
+ * that use it, so `var(--mm-ink)` etc. resolve where the class is actually
+ * applied (always under `body.mm-public-body`), not at `:root`. Confirmed
+ * via computed-style inspection in the browser — with plain `@theme`,
+ * `bg-mm-ink/74` computed to transparent (`rgba(0,0,0,0)`).
+ */
+
+@theme inline {
+  --color-mm-ink: var(--mm-ink);
+  --color-mm-paper: var(--mm-paper);
+  --color-mm-brand-1: var(--mm-brand1);
+  --color-mm-brand-2: var(--mm-brand2);
+  --color-mm-brand-3: var(--mm-brand3);
+  --color-mm-track: #3d3d3d;
+  --color-mm-hairline: #333;
+  --color-mm-navy: var(--mm-navy);
+  --color-mm-hero-btn: rgba(10, 12, 20, 0.6);
+  --color-mm-dot: #555;
+
+  --spacing-mm-gutter: var(--mm-pad);
+  --spacing-mm-chrome-top: 34px;
+  --spacing-mm-chrome-top-sm: 38px;
+  --spacing-mm-hair: 0.01em;
+  --spacing-mm-navlinks: clamp(7px, 1.15vw, 17px);
+  --spacing-mm-rise: 120%;
+  --spacing-mm-menu-hide: 110%;
+  --spacing-mm-loader-logo: clamp(78px, 12vw, 150px);
+  --spacing-mm-2xs: 7px;
+  --spacing-mm-sm: 17px;
+  --spacing-mm-md: 19px;
+  --spacing-mm-lg: 26px;
+  --spacing-mm-xl: 46px;
+  --spacing-mm-2xl: 110px;
+  --spacing-mm-3xl: 150px;
+  --spacing-mm-slide-shift: 4%;
+  --spacing-mm-hero-copy: min(800px, 58vw);
+  --spacing-mm-hero-copy-md: min(760px, 78vw);
+  --spacing-mm-hero-copy-sm: 94vw;
+  --spacing-mm-hero-pad: 0.08em;
+
+  --radius-mm-pill: 20px;
+
+  --text-mm-8: 8px;
+  --text-mm-9: 9px;
+  --text-mm-11: 11px;
+  --text-mm-17: 17px;
+  --text-mm-loader: clamp(42px, 10vw, 150px);
+  --text-mm-mobile-link: 12vw;
+  --text-mm-hero: clamp(64px, 8.6vw, 142px);
+  --text-mm-hero-mobile: 15vw;
+
+  --tracking-mm-loader: -0.07em;
+  --tracking-mm-menu: -0.06em;
+  --tracking-mm-wide: 0.08em;
+  --tracking-mm-hero: -0.075em;
+
+  --leading-mm-loader: 0.7;
+  --leading-mm-tight: 1.15;
+  --leading-mm-hero: 0.82;
+
+  --shadow-mm-cta: 0 8px 28px rgba(255, 25, 114, 0.16);
+  --drop-shadow-mm-logo: 0 18px 45px rgba(255, 25, 114, 0.25);
+
+  --blur-mm-nav: 18px;
+
+  --ease-mm: var(--mm-ease);
+
+  --breakpoint-mm-lg: 1180px;
+  --breakpoint-mm-md: 950px;
+  --breakpoint-mm-sm: 620px;
+}
+
+/* z-index has no extensible Tailwind theme namespace (unlike color/spacing/
+   text/etc.) — a `--z-*` block inside `@theme` silently generates no
+   `z-mm-*` utility at all, confirmed empirically. `@utility` is the correct
+   mechanism here instead. */
+@utility z-mm-cursor {
+  z-index: 9999;
+}
+
+@utility z-mm-ring {
+  z-index: 9998;
+}
+
+@utility z-mm-loader {
+  z-index: 9990;
+}
+
+@utility z-mm-announcement {
+  z-index: 900;
+}
+
+@utility z-mm-nav {
+  z-index: 850;
+}
+
+@utility z-mm-menu {
+  z-index: 840;
+}
+
+/* AnnouncementBar and Nav are now separate components, but the nav still
+   needs to snap to the top the instant the announcement is dismissed. A
+   relational (sibling) selector has no Tailwind equivalent, arbitrary or
+   otherwise, so it's expressed as plain CSS keyed off literal marker
+   classes — Nav itself stays unaware of the announcement's dismissed state. */
+.mm-announcement.mm-hide ~ .mm-nav {
+  top: 0;
+}
+
+/* Asymmetric grid templates have no Tailwind theme namespace of their own —
+   `@utility` is Tailwind's supported way to add a named class for a value a
+   theme namespace can't express, short of `grid-cols-[...]` arbitrary syntax. */
+@utility grid-rows-mm-loader {
+  grid-template-rows: 1fr auto;
+}
+
+@utility grid-cols-mm-nav {
+  grid-template-columns: minmax(180px, 1fr) auto minmax(190px, 1fr);
+}
+
+@utility grid-cols-mm-nav-tight {
+  grid-template-columns: auto 1fr auto;
+}
+
+@utility grid-cols-mm-nav-compact {
+  grid-template-columns: 1fr auto;
+}
+
+@utility clip-mm-open {
+  clip-path: inset(0 0 0 0);
+}
+
+@utility clip-mm-closed {
+  clip-path: inset(0 0 100% 0);
+}
+
+/* The custom cursor's width/height are also driven by raw inline styles on
+   every pointer move (position tracking) — `transition-all` would put a lag
+   on that tracking, and Tailwind has no built-in width+height property
+   group, so this is scoped to exactly the two properties that should ease. */
+@utility transition-mm-size {
+  transition-property: width, height;
+  transition-duration: 250ms;
+  transition-timing-function: var(--mm-ease);
+}
+
+/* Nav's scroll-compact transition eases `top` and `background-color`/`padding`
+   at different durations — Tailwind's transition utilities apply one duration
+   to every listed property, so the compound value is bundled here instead. */
+@utility transition-mm-nav {
+  transition:
+    top 0.45s var(--mm-ease),
+    background-color 0.3s ease,
+    padding 0.3s ease;
+}
+
+/* Mobile menu open/close needs an asymmetric `visibility` delay (instant on
+   open, deferred on close until the slide-out finishes) — same reasoning as
+   transition-mm-nav above. */
+@utility transition-mm-menu-open {
+  transition:
+    transform 0.72s var(--mm-ease),
+    opacity 0.28s ease,
+    visibility 0s;
+}
+
+/* HeroCarousel */
+
+/* The decorative background grid: two 1px-line gradients (vertical +
+   horizontal) at a matching background-size, faded top/bottom via a mask.
+   Bundled as one utility since the three values are inherently coupled —
+   changing the grid spacing means changing all three together. */
+@utility bg-mm-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 54px 54px;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 25%,
+    black 70%,
+    transparent
+  );
+}
+
+/* Video-slide readability shade — a horizontal fade (readable text over
+   video on the left) plus a vertical fade, and a separate, differently
+   balanced version for narrow viewports where the text needs more of the
+   frame. Two distinct gradient configurations, not a single one with an
+   opacity modifier, hence two utilities rather than one. */
+@utility bg-mm-hero-shade {
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(5, 7, 12, 0.9) 0%,
+      rgba(5, 7, 12, 0.72) 36%,
+      rgba(5, 7, 12, 0.3) 67%,
+      rgba(5, 7, 12, 0.16) 100%
+    ),
+    linear-gradient(180deg, rgba(5, 7, 12, 0.34), rgba(5, 7, 12, 0.22));
+}
+
+@utility bg-mm-hero-shade-sm {
+  background-image:
+    linear-gradient(90deg, rgba(5, 7, 12, 0.91), rgba(5, 7, 12, 0.57)),
+    linear-gradient(180deg, rgba(5, 7, 12, 0.16), rgba(5, 7, 12, 0.4));
+}
+
+@utility text-shadow-mm-hero {
+  text-shadow: 0 4px 34px rgba(0, 0, 0, 0.38);
+}
+
+/* Slide crossfade: opacity and the entrance transform ease at different
+   durations, so (like transition-mm-nav above) this needs a bundled value
+   rather than Tailwind's single-duration transition utilities. */
+@utility transition-mm-slide {
+  transition:
+    opacity 0.65s ease,
+    transform 0.8s var(--mm-ease);
+}
+
+@utility transition-mm-menu-closed {
+  transition:
+    transform 0.72s var(--mm-ease),
+    opacity 0.28s ease,
+    visibility 0s linear 0.72s;
+}

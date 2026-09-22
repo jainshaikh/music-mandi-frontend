@@ -100,9 +100,9 @@ export default function LoginForm({ tone }: { tone: boolean }) {
       >
         Use the demo credentials shown above.
       </div>
-      <button className="btn fill" type="submit" style={{ marginTop: 20 }}>
+      {/* <button className="btn fill" type="submit" style={{ marginTop: 20 }}>
         Log in
-      </button>
+      </button> */}
     </form>
   );
 }
