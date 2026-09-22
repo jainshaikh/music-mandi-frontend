@@ -917,9 +917,24 @@
   padding: 0 !important;
 }
 
+/*
+ * The frame has its own min-height (min(72vh, 760px) desktop, 360px on
+ * mobile — see .tm-banner-frame above) independent of the image's own
+ * 16/9 aspect ratio. A normal-flow, height:auto image never grows to fill
+ * that min-height, exposing the frame's own dark background as a solid
+ * block beneath it — most visible on mobile, where the frame's height is a
+ * fixed 360px but a full-width 16/9 image is only ~190px tall. The frame is
+ * already position:relative + overflow:hidden (a cropping viewport), so the
+ * fix is to have the image fill it absolutely and let object-fit:cover (set
+ * on the base .tm-banner-image rule) do the cropping, rather than sizing
+ * itself independently.
+ */
 .tm-banner-photo-frame .tm-banner-image {
   display: block;
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: auto;
+  height: 100%;
+  aspect-ratio: auto;
   min-height: 0;
 }
