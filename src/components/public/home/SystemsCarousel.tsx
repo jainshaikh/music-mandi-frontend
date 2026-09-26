@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import Reveal from "../Reveal";
-import styles from "./SystemsCarousel.module.css";
 
 const SYSTEMS = [
   {
@@ -53,11 +52,6 @@ const SYSTEMS = [
   },
 ];
 
-// Pinned horizontal scroll: the section reserves a tall vertical run, the
-// inner viewport sticks to the top of the screen while it scrolls past, and
-// the track's transform is driven directly off scroll progress (rAF-batched)
-// so it inherits whatever easing the page's native/Lenis scroll already has,
-// instead of fighting it with a second, separately-animated scroll system.
 export default function SystemsCarousel() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const viewportRef = useRef<HTMLDivElement | null>(null);
@@ -83,11 +77,6 @@ export default function SystemsCarousel() {
       const maxX = Math.max(0, track.scrollWidth - viewport.clientWidth);
       const x = maxX * progress;
       track.style.transform = `translate3d(${-x}px, 0, 0)`;
-
-      // Map progress directly across all cards (rather than picking whichever
-      // card sits closest to the current scroll offset) so every card gets a
-      // turn as "active", including the last few that stay on screen together
-      // once the track hits its max scroll.
       const active = Math.round(progress * (cardCount - 1));
       setActiveIndex((prev) => (prev === active ? prev : active));
     };
@@ -112,45 +101,47 @@ export default function SystemsCarousel() {
   }, []);
 
   return (
-    <section
-      className={cn(styles.features, styles["compact-systems"])}
-      ref={sectionRef}
-    >
-      <div className={styles["systems-sticky"]}>
-        <div className={styles["section-title"]}>
-          <div>
-            <Reveal as="div" className="eyebrow">
-              One account
-            </Reveal>
-            <h2>
-              Nine Systems.
-              <br />
-              <span className="serif">One Release Flow.</span>
-            </h2>
-          </div>
+    <section ref={sectionRef} className="bg-mm-navy relative z-10 h-[360vh]">
+      <div className="px-mm-gutter sticky top-19 flex h-[calc(100svh-76px)] flex-col justify-center overflow-hidden py-8">
+        <div className="mb-8">
+          <Reveal as="div" className="eyebrow">
+            One account
+          </Reveal>
+          <Reveal
+            as="h2"
+            className="mt-4 text-5xl leading-none font-bold tracking-tighter text-balance text-white sm:text-7xl lg:text-8xl"
+          >
+            Nine Systems.
+            <br />
+            <span className="serif">One Release Flow.</span>
+          </Reveal>
         </div>
-        <div className={styles["systems-viewport"]} ref={viewportRef}>
+
+        <div className="w-full overflow-hidden" ref={viewportRef}>
           <div
-            className={styles["systems-track"]}
-            id="systemsTrack"
+            className="flex w-max gap-4 pb-2 will-change-transform"
             ref={trackRef}
           >
             {SYSTEMS.map((s, i) => (
               <article
+                key={s.n}
                 className={cn(
-                  styles.feature,
-                  styles["system-card"],
-                  i === activeIndex && styles.active,
-                  // Literal (non-module) marker: SiteChrome's custom-cursor
-                  // grow effect matches DOM classes directly via closest(),
-                  // outside the CSS Modules system.
+                  "group relative min-h-75 w-75 shrink-0 scale-95 overflow-hidden rounded-2xl border border-white/12 bg-slate-900 p-8 opacity-50 transition-all duration-500 ease-out sm:w-100 lg:w-115",
+                  i === activeIndex &&
+                    "from-mm-brand-1 to-mm-brand-2 scale-100 bg-linear-to-br opacity-100",
                   "cursor-hover-target",
                 )}
-                key={s.n}
               >
-                <div className={styles["feature-num"]}>{s.n}</div>
-                <h3>{s.title}</h3>
-                <p>{s.p}</p>
+                <span className="serif text-3xl text-white/80">{s.n}</span>
+                <h3 className="mt-16 mb-3.5 text-3xl leading-none tracking-tighter text-white uppercase sm:text-4xl lg:text-5xl">
+                  {s.title}
+                </h3>
+                <p className="max-w-xs text-sm text-slate-300 group-hover:text-white">
+                  {s.p}
+                </p>
+                <span className="absolute top-4 right-5 -translate-x-2 translate-y-2 text-xl opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100">
+                  ↗
+                </span>
               </article>
             ))}
           </div>

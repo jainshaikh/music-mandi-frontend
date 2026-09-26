@@ -58,6 +58,7 @@
   --spacing-mm-rise: 120%;
   --spacing-mm-menu-hide: 110%;
   --spacing-mm-loader-logo: clamp(78px, 12vw, 150px);
+  --spacing-mm-final-disc: clamp(90px, 14vw, 180px);
   --spacing-mm-2xs: 7px;
   --spacing-mm-sm: 17px;
   --spacing-mm-md: 19px;
@@ -81,6 +82,7 @@
   --text-mm-mobile-link: 12vw;
   --text-mm-hero: clamp(64px, 8.6vw, 142px);
   --text-mm-hero-mobile: 15vw;
+  --text-mm-final: clamp(44px, 9vw, 118px);
 
   --tracking-mm-loader: -0.07em;
   --tracking-mm-menu: -0.06em;
@@ -101,6 +103,15 @@
   --breakpoint-mm-lg: 1180px;
   --breakpoint-mm-md: 950px;
   --breakpoint-mm-sm: 620px;
+
+  /* TeleAdsSection — these three recur across shared.css and the
+     standalone /tele-ads route's own files too, not just this component,
+     so they're a genuine reused "tele-ads" sub-palette rather than a
+     one-off decorative choice. */
+  --color-mm-tele-ink: #0b101b;
+  --color-mm-tele-black: #090d16;
+  --color-mm-tele-pink: #ff5d90;
+  --aspect-mm-tele-video: 1288 / 1608;
 }
 
 /* z-index has no extensible Tailwind theme namespace (unlike color/spacing/
@@ -258,4 +269,110 @@
     transform 0.72s var(--mm-ease),
     opacity 0.28s ease,
     visibility 0s linear 0.72s;
+}
+
+/* PartnerRunway */
+
+/* Infinite horizontal marquee — the logo list is rendered twice (see the
+   component), and this animation scrolls exactly one set's width to the
+   left before looping, so the seam is invisible. The `-10px` matches half
+   of the `gap-5` (20px) between logos, correcting for the gap that sits
+   right at the seam between the two rendered copies. */
+@keyframes partner-runway-scroll {
+  to {
+    transform: translateX(calc(-50% - 10px));
+  }
+}
+
+@utility animate-marquee {
+  animation: partner-runway-scroll 24s linear infinite;
+}
+
+/* DspMarquee */
+
+/* Two rows scroll opposite directions at different speeds — same seamless
+   double-render technique as animate-marquee above, but without the
+   half-gap correction (this row's items sit flush, not gapped at the seam). */
+@keyframes dsp-marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@utility animate-dsp-scroll {
+  animation: dsp-marquee-scroll 32s linear infinite;
+}
+
+@utility animate-dsp-scroll-reverse {
+  animation: dsp-marquee-scroll 38s linear infinite reverse;
+}
+
+/* FairRightsSection */
+
+/* A slow, custom-duration spin — Tailwind's built-in `animate-spin` bakes
+   in a fixed 1s duration with no separate way to override just the
+   duration, so this defines its own keyframe/utility pair instead of
+   fighting that. */
+@keyframes orbit-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@utility animate-orbit-spin {
+  animation: orbit-spin 22s linear infinite;
+}
+
+/* TeleAdsSection */
+
+/* The card's asymmetric 1.1fr/0.9fr split has no Tailwind theme namespace
+   of its own — same reasoning as Nav's grid-cols-mm-nav. */
+@utility grid-cols-mm-tele {
+  grid-template-columns: 1.1fr 0.9fr;
+}
+
+/* FaqSection */
+
+@utility grid-cols-mm-faq {
+  grid-template-columns: 0.65fr 1.35fr;
+}
+
+/* Footer */
+
+@utility grid-cols-mm-footer {
+  grid-template-columns: 1fr auto;
+}
+
+/* FinalCtaSection */
+
+/* Reuses the orbit-spin keyframe above (same rotation, just via
+   `transform` instead of the standalone `rotate` property the original
+   used — visually identical) at the disc/star's own two different
+   durations, rather than defining a near-duplicate keyframe. */
+@utility animate-mm-disc-spin {
+  animation: orbit-spin 15s linear infinite;
+}
+
+@utility animate-mm-star-spin {
+  animation: orbit-spin 10s linear infinite;
+}
+
+/* The ring/core must scale as a percentage of their parent, not a fixed
+   pixel size, so the orbit never overflows a narrower parent on mobile —
+   the parent now has a definite size (aspect-square + w-full), so percentage
+   sizing on these absolutely-positioned children works correctly. Tailwind's
+   size utilities are either the fixed spacing scale or a small enumerated
+   set of fractions (1/2, 1/3, 3/4, ...), with nothing at 84%/42%, hence
+   these two custom utilities. */
+@utility size-mm-orbit-ring {
+  width: 84%;
+  height: 84%;
+}
+
+@utility size-mm-orbit-core {
+  width: 42%;
+  height: 42%;
 }

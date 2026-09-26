@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import { ELAPSED_FIELD, HONEYPOT_FIELD } from "@/lib/formGuard";
 import { showToast } from "@/lib/toast";
 import styles from "./ContactForm.module.css";
 
@@ -19,6 +20,11 @@ const TOPICS = [
 export default function ContactForm() {
   const [topic, setTopic] = useState(TOPICS[0]);
   const [status, setStatus] = useState<"idle" | "submitting" | "sent">("idle");
+  const mountedAt = useRef(0);
+
+  useEffect(() => {
+    mountedAt.current = Date.now();
+  }, []);
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -37,6 +43,8 @@ export default function ContactForm() {
           phone: data.get("phone"),
           topic,
           message: data.get("message"),
+          [HONEYPOT_FIELD]: data.get(HONEYPOT_FIELD),
+          [ELAPSED_FIELD]: Date.now() - mountedAt.current,
         }),
       });
 
@@ -73,20 +81,29 @@ export default function ContactForm() {
         id="contactForm"
         onSubmit={onSubmit}
       >
+        {/* Honeypot (see src/lib/formGuard.ts) — hidden from people and
+            screen readers; bots that fill every input fill this too. */}
+        <div className="sr-only" aria-hidden="true">
+          <label>
+            Website
+            <input name={HONEYPOT_FIELD} tabIndex={-1} autoComplete="off" />
+          </label>
+        </div>
         <div className={styles["contact-fields"]}>
           <label>
-            Name *<input name="name" required />
+            Name *<input name="name" maxLength={100} required />
           </label>
           <label>
-            Email *<input name="email" type="email" required />
+            Email *
+            <input name="email" type="email" maxLength={254} required />
           </label>
           <label>
             Company
-            <input name="company" />
+            <input name="company" maxLength={150} />
           </label>
           <label>
             Phone
-            <input name="phone" type="tel" />
+            <input name="phone" type="tel" maxLength={30} />
           </label>
           <label className={styles.full}>
             What is this about?
@@ -97,7 +114,7 @@ export default function ContactForm() {
             </select>
           </label>
           <label className={styles.full}>
-            Message *<textarea name="message" required />
+            Message *<textarea name="message" maxLength={5000} required />
           </label>
         </div>
         <div

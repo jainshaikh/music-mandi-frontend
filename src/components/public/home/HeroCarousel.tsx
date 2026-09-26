@@ -5,9 +5,6 @@ import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 const SLIDE_COUNT = 3;
-// Was 6500000 (~108 minutes) — a stray extra "000" meant the carousel
-// effectively never auto-advanced. 6.5s matches the transition timing this
-// component was designed around.
 const AUTOPLAY_MS = 6500;
 
 const VIDEOS = [
@@ -78,11 +75,11 @@ export default function HeroCarousel() {
           />
           <div className="bg-mm-hero-shade max-mm-sm:bg-mm-hero-shade-sm pointer-events-none absolute inset-0 z-1" />
           <div className="max-w-mm-hero-copy max-mm-md:max-w-mm-hero-copy-md max-mm-sm:max-w-mm-hero-copy-sm relative z-2">
-            <h1 className="text-mm-hero leading-mm-hero tracking-mm-hero text-shadow-mm-hero max-mm-sm:text-mm-hero-mobile mt-3.5 mb-6">
+            <h1 className="text-mm-hero leading-mm-hero tracking-mm-hero text-shadow-mm-hero max-mm-sm:text-mm-hero-mobile mt-3.5 mb-6 font-bold">
               Release.
               <br />
               Track.{" "}
-              <span className="from-mm-brand-1 to-mm-brand-2 pr-mm-hero-pad inline-block bg-linear-to-r bg-clip-text text-transparent">
+              <span className="from-mm-brand-1 to-mm-brand-2 pr-mm-hero-pad inline-block bg-linear-to-r bg-clip-text font-bold text-transparent">
                 Get
               </span>
               <br />
@@ -121,10 +118,10 @@ export default function HeroCarousel() {
           />
           <div className="bg-mm-hero-shade max-mm-sm:bg-mm-hero-shade-sm pointer-events-none absolute inset-0 z-1" />
           <div className="max-w-mm-hero-copy max-mm-md:max-w-mm-hero-copy-md max-mm-sm:max-w-mm-hero-copy-sm relative z-2">
-            <h1 className="text-mm-hero leading-mm-hero tracking-mm-hero text-shadow-mm-hero max-mm-sm:text-mm-hero-mobile mt-3.5 mb-6">
+            <h1 className="text-mm-hero leading-mm-hero tracking-mm-hero text-shadow-mm-hero max-mm-sm:text-mm-hero-mobile mt-3.5 mb-6 font-bold">
               Tamasha. <br />
               Music.{" "}
-              <span className="from-mm-brand-1 to-mm-brand-2 pr-mm-hero-pad inline-block bg-linear-to-r bg-clip-text text-transparent">
+              <span className="from-mm-brand-1 to-mm-brand-2 pr-mm-hero-pad inline-block bg-linear-to-r bg-clip-text font-bold text-transparent">
                 A New
               </span>
               <br />
@@ -132,7 +129,7 @@ export default function HeroCarousel() {
                 Record Every
               </span>
               <br />
-              <span className="from-mm-brand-1 to-mm-brand-2 pr-mm-hero-pad inline-block bg-linear-to-r bg-clip-text text-transparent">
+              <span className="from-mm-brand-1 to-mm-brand-2 pr-mm-hero-pad inline-block bg-linear-to-r bg-clip-text font-bold text-transparent">
                 Week.
               </span>
             </h1>
@@ -162,7 +159,7 @@ export default function HeroCarousel() {
           />
           <div className="bg-mm-hero-shade max-mm-sm:bg-mm-hero-shade-sm pointer-events-none absolute inset-0 z-1" />
           <div className="max-w-mm-hero-copy max-mm-md:max-w-mm-hero-copy-md max-mm-sm:max-w-mm-hero-copy-sm relative z-2">
-            <h1 className="text-mm-hero leading-mm-hero tracking-mm-hero text-shadow-mm-hero max-mm-sm:text-mm-hero-mobile mt-3.5 mb-6">
+            <h1 className="text-mm-hero leading-mm-hero tracking-mm-hero text-shadow-mm-hero max-mm-sm:text-mm-hero-mobile mt-3.5 mb-6 font-bold">
               TELE ADs.
               <span className="from-mm-brand-1 to-mm-brand-2 pr-mm-hero-pad inline-block bg-linear-to-r bg-clip-text text-transparent">
                 {" "}

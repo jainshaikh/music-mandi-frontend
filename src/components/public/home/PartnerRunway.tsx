@@ -1,8 +1,13 @@
 import Image from "next/image";
-import { cn } from "@/lib/utils";
-import styles from "./PartnerRunway.module.css";
 
-const LOGOS = [
+type Logo = {
+  src: string;
+  alt: string;
+  w: number;
+  h: number;
+};
+
+const LOGOS: Logo[] = [
   {
     src: "/silderlogo/TheOrchard.png",
     alt: "The Orchard logo",
@@ -24,29 +29,25 @@ const LOGOS = [
   },
 ];
 
-// Pure-CSS infinite marquee (`.partner-track{animation:partnerRoll ...}`) — the
-// logo set is duplicated once so the loop is seamless, exactly like the source.
 export default function PartnerRunway() {
   const doubled = [...LOGOS, ...LOGOS];
   return (
-    <section className={cn(styles.trust, styles["partner-runway"])}>
-      <div className={cn(styles["trust-label"], "eyebrow")}>
+    <section className="bg-mm-navy relative flex min-h-57.5 items-center overflow-hidden border-t border-b border-white/8 text-white">
+      <div className="eyebrow left-mm-gutter max-mm-sm:top-6 max-mm-sm:left-4.5 absolute top-7">
         Distribution and promotion partners
       </div>
-      <div
-        className={cn(styles["partner-track"], styles["real-partner-track"])}
-      >
+      <div className="animate-marquee flex w-max items-center gap-5 py-15">
         {doubled.map((logo, i) => (
           <div
-            className={cn(styles["partner-logo-card"], styles["real-logo"])}
             key={`${logo.alt}-${i}`}
+            className="max-mm-sm:h-19.5 max-mm-sm:w-47.5 grid h-23 w-62.5 place-items-center overflow-hidden"
           >
             <Image
               src={logo.src}
               alt={logo.alt}
               width={logo.w}
               height={logo.h}
-              data-tm-logo={logo.alt.startsWith("Tamasha") ? "" : undefined}
+              className="max-mm-sm:h-mm-xl h-14.5 w-auto object-contain"
             />
           </div>
         ))}

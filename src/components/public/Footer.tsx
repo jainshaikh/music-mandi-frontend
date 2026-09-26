@@ -1,7 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
-import styles from "./Footer.module.css";
 
 function InstagramIcon() {
   return (
@@ -13,6 +11,7 @@ function InstagramIcon() {
       stroke="currentColor"
       strokeWidth="1.6"
       aria-hidden="true"
+      className="shrink-0"
     >
       <rect x="3" y="3" width="18" height="18" rx="5" />
       <circle cx="12" cy="12" r="4.2" />
@@ -31,6 +30,7 @@ function YouTubeIcon() {
       stroke="currentColor"
       strokeWidth="1.6"
       aria-hidden="true"
+      className="shrink-0"
     >
       <rect x="2.5" y="5.5" width="19" height="13" rx="4" />
       <path
@@ -50,6 +50,7 @@ function TikTokIcon() {
       height="18"
       fill="currentColor"
       aria-hidden="true"
+      className="shrink-0"
     >
       <path d="M16.5 3c.4 2.2 1.9 3.8 4 4.2v3a7.3 7.3 0 0 1-4-1.2v6.4a5.9 5.9 0 1 1-5.1-5.85v3.1a2.85 2.85 0 1 0 2.1 2.75V3h3z" />
     </svg>
@@ -58,7 +59,13 @@ function TikTokIcon() {
 
 function LinkedInIcon() {
   return (
-    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+    <svg
+      viewBox="0 0 24 24"
+      width="18"
+      height="18"
+      aria-hidden="true"
+      className="shrink-0"
+    >
       <rect
         x="2.5"
         y="2.5"
@@ -88,28 +95,37 @@ const SOCIALS = [
 
 export default function Footer() {
   return (
-    <footer className={cn(styles.footer, styles["footer-minimal"])} id="about">
-      <div className={styles["footer-minimal-top"]}>
-        <div className={styles["footer-minimal-brand"]}>
-          <div className={styles["foot-brand-lock"]}>
+    <footer
+      id="about"
+      className="bg-mm-ink text-mm-paper sm:px-mm-gutter flex flex-col justify-between px-4 pt-13 pb-5 sm:pt-18 sm:pb-6"
+    >
+      <div className="md:grid-cols-mm-footer grid grid-cols-1 items-start gap-8 sm:gap-12">
+        <div>
+          <div className="flex items-center gap-3.5">
             <Image
               src="/images/music-mandi-logo.png"
               alt="Music Mandi logo"
               width={54}
               height={54}
+              className="size-13.5 rounded-full object-contain"
             />
             <div>
-              <strong>Music Mandi</strong>
-              <small>Release. Track. Get Paid.</small>
+              <strong className="block text-2xl tracking-tight">
+                Music Mandi
+              </strong>
+              <small className="mt-2 block text-xs tracking-widest text-slate-400 uppercase">
+                Release. Track. Get Paid.
+              </small>
             </div>
           </div>
-          <div className={styles["footer-socials"]}>
+          <div className="mt-5 flex flex-wrap gap-4">
             {SOCIALS.map(({ href, label, Icon }) => (
               <a
                 key={label}
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs tracking-wide text-slate-400 uppercase transition-colors duration-300 hover:text-white"
               >
                 <Icon />
                 {label}
@@ -117,14 +133,34 @@ export default function Footer() {
             ))}
           </div>
         </div>
-        <nav className={styles["footer-main-nav"]}>
-          <Link href="/#tamasha-launch">Tamasha Music</Link>
-          <Link href="/tele-ads">TELE Ads</Link>
-          <Link href="/about">About</Link>
-          <Link href="/contact">Contact Us</Link>
+        <nav className="grid grid-cols-2 gap-4 sm:flex sm:flex-wrap md:gap-7">
+          <Link
+            href="/#tamasha-launch"
+            className="text-xs tracking-widest text-white uppercase"
+          >
+            Tamasha Music
+          </Link>
+          <Link
+            href="/tele-ads"
+            className="text-xs tracking-widest text-white uppercase"
+          >
+            TELE Ads
+          </Link>
+          <Link
+            href="/about"
+            className="text-xs tracking-widest text-white uppercase"
+          >
+            About
+          </Link>
+          <Link
+            href="/contact"
+            className="text-xs tracking-widest text-white uppercase"
+          >
+            Contact Us
+          </Link>
         </nav>
       </div>
-      <div className={styles["footer-minimal-bottom"]}>
+      <div className="mt-14 flex flex-col justify-between gap-5 border-t border-white/9 pt-5 text-xs tracking-widest text-slate-500 uppercase sm:flex-row">
         <span>&copy; Music Mandi 2026 &middot; Pakistan</span>
       </div>
     </footer>
