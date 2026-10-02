@@ -403,6 +403,15 @@ Implemented:
   components (`FaqAccordion`, `ConfirmCard`, `Reveal`, `RouteArt`,
   `Toast`) — out of scope for this pass, not touched.
 
+- Home page load performance pass for slow connections (DEC-038): hero and
+  TeleAds videos re-encoded (web-streamable, no audio track, 1280-wide
+  desktop + portrait mobile cuts, WebP posters; 7.6 MB → 1.5 MB first
+  load), video deferred until after window `load` and lazy below the fold
+  (`LazyVideo`), public theme now server-rendered via
+  `body:has(.mm-public)` (`PublicScope.tsx` deleted — the page rendered
+  broken until hydration), splash screen removed (user decision), unused
+  Geist font preloads off, immutable caching for `/assets/*`, oversized
+  logo sources resized. Slow-4G LCP 4.3 s → 1.8 s, CLS 0.23 → 0.
 In Progress:
 - Migrating the remaining public pages from music_mandi-website (labels,
   tamasha (+pitch), 4 legal pages, login) — not started yet
@@ -451,6 +460,7 @@ Dashboards:
 | Spotify autocomplete             | ✅ Verified in-browser: with no `SPOTIFY_CLIENT_ID`/`SECRET` set, a search fails silently into no dropdown (matches source's own fallback design), no console exceptions. With a mocked successful response, the dropdown renders both results with correct genre capitalization, and selecting one auto-fills the Spotify URL field with the artist's `externalUrl` and closes the dropdown — including a source-faithful quirk where the debounce effect re-fires on the post-selection value change and briefly reopens the dropdown ~300ms later (present in the original source too, not introduced here). `pnpm build` compiles the route as dynamic (ƒ). **Not yet verified**: a real Spotify API call succeeding, pending the user's own app credentials. |
 | SiteChrome Tailwind conversion + split | ✅ Verified in-browser at 1440px/930px/390px widths via computed-style/`getBoundingClientRect` inspection (not just a visual read — see DEC-020): z-index, colors/gradients, breakpoints, and font-size/weight on every nav/mobile-menu/announcement element cross-checked against expected values, and splash-screen letter/progress-bar positions confirmed fully on-screen and aligned, after fixing the four bugs DEC-020 describes. Announcement bar dismiss (and the resulting nav-snaps-to-top via the two components' CSS sibling selector), full desktop nav incl. the gradient Submit Music button, and hamburger → mobile menu (links, Submit Music) all confirmed working. No console errors. `pnpm lint`/`pnpm build`/`pnpm test`/`pnpm test:e2e` all pass. |
 | HeroCarousel arbitrary-value cleanup | ✅ Verified in-browser at 1440px and 390px widths for all 3 slides (see DEC-021) — video shade gradients, gradient heading text, and dot/arrow controls all pixel-equivalent to the pre-change render. A real bug was caught and fixed in the same pass: slide 0's mobile heading was `50vw` (over 3x slides 1/2's `15vw` for the same role), confirmed by the user to visually break (text overflowing off both screen edges) — now uses the same `15vw` token as the other slides. `pnpm lint`/`pnpm build`/`pnpm test`/`pnpm test:e2e` all pass. |
+| Home page load performance (DEC-038) | ✅ Profiled with Playwright + CDP network logging on a production build: slow 4G 7.65 MB → 1.49 MB, LCP 4.3 s → 1.8 s, CLS 0.23 → 0.00, hero video playing 5.2 s → 2.8 s. Verified in-browser at 1440px and iPhone 13: desktop/mobile video + poster selection, only the active slide plays, TeleAds video idle until scrolled to and paused when scrolled away, custom cursor only hides the native cursor once active, theme correct with JS disabled, `/tele-ads` hero video. No console errors. `pnpm lint`/`pnpm typecheck`/`pnpm test`/`pnpm build`/`pnpm test:e2e` pass. |
 
 Note: `next typegen` must be run once (or `pnpm dev`/`pnpm build` run once) before `pnpm typecheck` works standalone, since Next.js 15+ generates global route types (`LayoutProps`, etc.) into `.next/types` on first build/dev/typegen.
 

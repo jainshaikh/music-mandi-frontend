@@ -111,8 +111,15 @@ export default function TeleAdsPage() {
             playsInline
             preload="auto"
             aria-hidden="true"
-            src="/assets/TeleAddHeader.mp4"
-          />
+            poster="/assets/tele-ads-desktop.webp"
+          >
+            <source
+              media="(max-width: 620px)"
+              src="/assets/tele-ads-mobile.mp4"
+              type="video/mp4"
+            />
+            <source src="/assets/tele-ads-desktop.mp4" type="video/mp4" />
+          </video>
           <div className={styles["tele-detail-video-shade"]}></div>
           <div className={styles["tele-clean-copy"]}>
             <span className="route-kicker">A Music Mandi Product</span>

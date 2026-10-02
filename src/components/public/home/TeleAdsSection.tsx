@@ -1,4 +1,5 @@
 import Link from "next/link";
+import LazyVideo from "@/components/public/LazyVideo";
 import Reveal from "@/components/public/Reveal";
 
 export default function TeleAdsSection() {
@@ -36,15 +37,10 @@ export default function TeleAdsSection() {
           </div>
         </div>
         <div className="bg-mm-tele-black relative mt-7 flex w-full min-w-0 items-center justify-center justify-self-center overflow-hidden rounded-2xl md:mt-0 md:w-[min(100%,620px)] md:justify-self-end md:rounded-3xl">
-          <video
+          <LazyVideo
             className="aspect-mm-tele-video bg-mm-tele-black block h-auto w-full object-contain"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            aria-hidden="true"
-            src="/assets/TeleAddCalling.mp4"
+            src="/assets/tele-ads-calling.mp4"
+            poster="/assets/tele-ads-calling.webp"
           />
         </div>
       </div>

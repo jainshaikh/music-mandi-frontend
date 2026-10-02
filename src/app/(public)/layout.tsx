@@ -1,8 +1,6 @@
 import "./public-base.css";
 import "@/components/public/shared.css";
-import PublicScope from "@/components/public/PublicScope";
 import SmoothScroll from "@/components/public/SmoothScroll";
-import SplashScreen from "@/components/public/SplashScreen";
 import AnnouncementBar from "@/components/public/AnnouncementBar";
 import Nav from "@/components/public/Nav";
 import CustomCursor from "@/components/public/CustomCursor";
@@ -24,9 +22,7 @@ export default function PublicLayout({
 }) {
   return (
     <div className="mm-public">
-      <PublicScope />
       <SmoothScroll />
-      <SplashScreen />
       <AnnouncementBar />
       <Nav />
       <CustomCursor />

@@ -1,25 +1,56 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 const SLIDE_COUNT = 3;
 const AUTOPLAY_MS = 6500;
 
-const VIDEOS = [
-  "/assets/ReleaseTrackHeader.mp4",
-  "/assets/TamashaMusicHeader.mp4",
-  "/assets/TeleAddHeader.mp4",
-];
+// Each name has -desktop/-mobile .mp4 + .webp (poster) variants in
+// public/assets. The mobile cut is a portrait center crop — the same region
+// `object-cover` shows on a phone anyway — so phones download far fewer bytes.
+const SLIDE_MEDIA = ["release-track", "tamasha-music", "tele-ads"];
+// Matches --breakpoint-mm-sm.
+const MOBILE_MEDIA = "(max-width: 620px)";
+
+// `top-px`, not `inset-0`: Chrome skips media that exactly fills the viewport
+// as an LCP candidate (treats it as a background), so the slide-1 poster
+// never counted and an off-screen slide's video later became the "LCP"
+// instead. The 1px strip sits under the opaque announcement bar/nav.
+const MEDIA_CLASS =
+  "pointer-events-none absolute inset-x-0 top-px z-0 h-full w-full object-cover object-center";
 
 export default function HeroCarousel() {
   const [active, setActive] = useState(0);
+  // Video waits for window `load` so it never competes with the HTML/CSS/JS
+  // and the slide-1 poster for bandwidth — on slow connections that
+  // contention is what kept the page unusable for tens of seconds.
+  const [videoReady, setVideoReady] = useState(false);
+  // Slides whose media has started loading stay mounted, so switching back
+  // never re-downloads. A slide loads when it becomes active, or early once
+  // the slide before it can play through.
+  const [loaded, setLoaded] = useState<boolean[]>([false, false, false]);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const videoRefs = useRef<Array<HTMLVideoElement | null>>([]);
 
   const show = (i: number) =>
     setActive(((i % SLIDE_COUNT) + SLIDE_COUNT) % SLIDE_COUNT);
+
+  const markLoaded = useCallback((i: number) => {
+    if (i >= SLIDE_COUNT) return;
+    setLoaded((prev) => (prev[i] ? prev : prev.map((v, j) => v || j === i)));
+  }, []);
+
+  useEffect(() => {
+    const start = () => setVideoReady(true);
+    if (document.readyState === "complete") {
+      const id = setTimeout(start, 0);
+      return () => clearTimeout(id);
+    }
+    window.addEventListener("load", start, { once: true });
+    return () => window.removeEventListener("load", start);
+  }, []);
 
   useEffect(() => {
     timerRef.current = setInterval(
@@ -40,7 +71,54 @@ export default function HeroCarousel() {
         video.pause();
       }
     });
-  }, [active]);
+  }, [active, videoReady, loaded]);
+
+  const renderMedia = (i: number) => {
+    const name = SLIDE_MEDIA[i];
+    const mounted = loaded[i] || i === active;
+    return (
+      <>
+        {(i === 0 || mounted) && (
+          <picture>
+            <source
+              media={MOBILE_MEDIA}
+              srcSet={`/assets/${name}-mobile.webp`}
+            />
+            <img
+              className={MEDIA_CLASS}
+              src={`/assets/${name}-desktop.webp`}
+              alt=""
+              fetchPriority={i === 0 ? "high" : "low"}
+            />
+          </picture>
+        )}
+        {videoReady && mounted && (
+          <video
+            ref={(el) => {
+              videoRefs.current[i] = el;
+            }}
+            className={MEDIA_CLASS}
+            muted
+            loop
+            playsInline
+            preload="auto"
+            aria-hidden="true"
+            onCanPlayThrough={() => {
+              markLoaded(i);
+              markLoaded(i + 1);
+            }}
+          >
+            <source
+              media={MOBILE_MEDIA}
+              src={`/assets/${name}-mobile.mp4`}
+              type="video/mp4"
+            />
+            <source src={`/assets/${name}-desktop.mp4`} type="video/mp4" />
+          </video>
+        )}
+      </>
+    );
+  };
 
   return (
     <section
@@ -61,18 +139,7 @@ export default function HeroCarousel() {
           )}
           data-slide="0"
         >
-          <video
-            ref={(el) => {
-              videoRefs.current[0] = el;
-            }}
-            className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover object-center"
-            muted
-            loop
-            playsInline
-            preload={active === 0 ? "auto" : "metadata"}
-            aria-hidden="true"
-            src={VIDEOS[0]}
-          />
+          {renderMedia(0)}
           <div className="bg-mm-hero-shade max-mm-sm:bg-mm-hero-shade-sm pointer-events-none absolute inset-0 z-1" />
           <div className="max-w-mm-hero-copy max-mm-md:max-w-mm-hero-copy-md max-mm-sm:max-w-mm-hero-copy-sm relative z-2">
             <h1 className="text-mm-hero leading-mm-hero tracking-mm-hero text-shadow-mm-hero max-mm-sm:text-mm-hero-mobile mt-3.5 mb-6 font-bold">
@@ -104,18 +171,7 @@ export default function HeroCarousel() {
           )}
           data-slide="1"
         >
-          <video
-            ref={(el) => {
-              videoRefs.current[1] = el;
-            }}
-            className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover object-center"
-            muted
-            loop
-            playsInline
-            preload={active === 1 ? "auto" : "metadata"}
-            aria-hidden="true"
-            src={VIDEOS[1]}
-          />
+          {renderMedia(1)}
           <div className="bg-mm-hero-shade max-mm-sm:bg-mm-hero-shade-sm pointer-events-none absolute inset-0 z-1" />
           <div className="max-w-mm-hero-copy max-mm-md:max-w-mm-hero-copy-md max-mm-sm:max-w-mm-hero-copy-sm relative z-2">
             <h1 className="text-mm-hero leading-mm-hero tracking-mm-hero text-shadow-mm-hero max-mm-sm:text-mm-hero-mobile mt-3.5 mb-6 font-bold">
@@ -145,18 +201,7 @@ export default function HeroCarousel() {
           )}
           data-slide="2"
         >
-          <video
-            ref={(el) => {
-              videoRefs.current[2] = el;
-            }}
-            className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover object-center"
-            muted
-            loop
-            playsInline
-            preload={active === 2 ? "auto" : "metadata"}
-            aria-hidden="true"
-            src={VIDEOS[2]}
-          />
+          {renderMedia(2)}
           <div className="bg-mm-hero-shade max-mm-sm:bg-mm-hero-shade-sm pointer-events-none absolute inset-0 z-1" />
           <div className="max-w-mm-hero-copy max-mm-md:max-w-mm-hero-copy-md max-mm-sm:max-w-mm-hero-copy-sm relative z-2">
             <h1 className="text-mm-hero leading-mm-hero tracking-mm-hero text-shadow-mm-hero max-mm-sm:text-mm-hero-mobile mt-3.5 mb-6 font-bold">

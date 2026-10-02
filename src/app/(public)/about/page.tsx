@@ -157,8 +157,8 @@ export default function AboutPage() {
               className={styles["partner-card-logo"]}
               src="/silderlogo/Jazz.png"
               alt="Jazz"
-              width={1080}
-              height={1080}
+              width={250}
+              height={210}
             />
             <span>National promotion</span>
           </div>

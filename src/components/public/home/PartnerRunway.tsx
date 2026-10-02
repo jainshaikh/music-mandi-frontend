@@ -20,7 +20,7 @@ const LOGOS: Logo[] = [
     w: 250,
     h: 233,
   },
-  { src: "/silderlogo/Jazz.png", alt: "Jazz logo", w: 1080, h: 1080 },
+  { src: "/silderlogo/Jazz.png", alt: "Jazz logo", w: 250, h: 210 },
   {
     src: "/silderlogo/TamashaMusic.png",
     alt: "Tamasha Music logo",

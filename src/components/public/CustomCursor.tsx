@@ -15,6 +15,9 @@ export default function CustomCursor() {
     const ring = ringRef.current;
     if (!cursor || !ring) return;
 
+    const root = document.documentElement;
+    root.classList.add("mm-cursor-active");
+
     let mx = innerWidth / 2;
     let my = innerHeight / 2;
     let rx = mx;
@@ -93,6 +96,7 @@ export default function CustomCursor() {
       document.removeEventListener("mouseover", onOver);
       document.removeEventListener("mouseout", onOut);
       document.removeEventListener("pointermove", onBtnMove);
+      root.classList.remove("mm-cursor-active");
     };
   }, []);
 
@@ -101,12 +105,12 @@ export default function CustomCursor() {
       <div
         id="cursor"
         ref={cursorRef}
-        className="pointer-coarse:hidden fixed left-0 top-0 z-mm-cursor h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white pointer-events-none mix-blend-difference transition-mm-size max-mm-md:hidden"
+        className="mm-cursor-active:visible z-mm-cursor transition-mm-size max-mm-md:hidden pointer-events-none invisible fixed top-0 left-0 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white mix-blend-difference pointer-coarse:hidden"
       />
       <div
         id="ring"
         ref={ringRef}
-        className="pointer-coarse:hidden fixed left-0 top-0 z-mm-ring h-mm-xl w-mm-xl -translate-x-1/2 -translate-y-1/2 rounded-full border border-white pointer-events-none mix-blend-difference max-mm-md:hidden"
+        className="mm-cursor-active:visible z-mm-ring h-mm-xl w-mm-xl max-mm-md:hidden pointer-events-none invisible fixed top-0 left-0 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white mix-blend-difference pointer-coarse:hidden"
       />
     </>
   );

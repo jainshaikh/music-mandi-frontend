@@ -4,17 +4,20 @@
  * that file had two :root blocks and two `body` blocks; the values here are
  * the ones that actually win in the browser today, merged into one place).
  *
- * Scoped to `body.mm-public-body` / `.mm-public` so none of it leaks into
+ * Scoped to `body:has(.mm-public)` / `.mm-public` so none of it leaks into
  * the modern Tailwind/shadcn areas of the app (artist/advertiser/admin).
- * `body.mm-public-body` is toggled by PublicScope (see
- * src/components/public/PublicScope.tsx) only while a public route is mounted.
+ * This must stay a pure-CSS match on the server-rendered `.mm-public`
+ * wrapper, never a class added from JS: on slow connections hydration can
+ * land tens of seconds after first paint, and every `mm-*` color token
+ * resolves through these variables — until they exist the splash renders
+ * transparent, gradient text is invisible, and the font falls back to serif.
  */
 
 html {
   scroll-behavior: smooth;
 }
 
-body.mm-public-body {
+body:has(.mm-public) {
   --mm-ink: #070a12;
   --mm-paper: #f7f4ef;
   --mm-lime: #ff8a33;
@@ -39,14 +42,19 @@ body.mm-public-body {
   color: #f7f7fb;
   font-family: Arial, Helvetica, sans-serif;
   overflow-x: hidden;
+}
+
+/* Set by CustomCursor once its replacement cursor is actually running —
+   hiding the native cursor any earlier leaves desktop users with none. */
+html.mm-cursor-active body:has(.mm-public) {
   cursor: none;
 }
 
-body.mm-public-body.menu-open {
+body:has(.mm-public).menu-open {
   overflow: hidden;
 }
 
-body.mm-public-body::before {
+body:has(.mm-public)::before {
   content: "";
   position: fixed;
   inset: 0;
@@ -85,7 +93,7 @@ body.mm-public-body::before {
 }
 
 @media (pointer: coarse) {
-  body.mm-public-body {
+  body:has(.mm-public) {
     cursor: auto !important;
   }
   .mm-public a,
@@ -95,7 +103,7 @@ body.mm-public-body::before {
 }
 
 @media (max-width: 950px) {
-  body.mm-public-body {
+  html.mm-cursor-active body:has(.mm-public) {
     cursor: auto;
   }
 }
