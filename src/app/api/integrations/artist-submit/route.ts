@@ -1,4 +1,14 @@
-import { escapeHtml, getSendGridConfig, sgMail } from "@/lib/email";
+import {
+  describeSendGridError,
+  escapeHtml,
+  getSendGridConfig,
+  sgMail,
+} from "@/lib/email";
+import {
+  MAX_UPLOAD_BYTES,
+  MAX_UPLOAD_LABEL,
+  totalFileBytes,
+} from "@/lib/formSubmission";
 
 // Interim, frontend-hosted implementation — see docs/DECISIONS.md DEC-017.
 // Ported from music_mandi-website's own working /api/integrations/artist-submit.
@@ -11,11 +21,6 @@ const GENRES = [
   "Classical",
   "Other",
 ];
-
-// Kept comfortably under SendGrid's ~30MB total message size — attachments
-// are base64'd before sending, which inflates raw bytes by roughly a third.
-const MAX_FILE_BYTES = 15 * 1024 * 1024;
-const MAX_TOTAL_BYTES = 20 * 1024 * 1024;
 
 export async function POST(request: Request) {
   const config = getSendGridConfig("ARTIST_TO_EMAIL");
@@ -70,23 +75,10 @@ export async function POST(request: Request) {
     .getAll("files")
     .filter((f): f is File => f instanceof File && f.size > 0);
 
-  let totalBytes = 0;
-  for (const file of files) {
-    if (file.size > MAX_FILE_BYTES) {
-      return Response.json(
-        {
-          error: `"${file.name}" is larger than 15MB. Please use a smaller file or share a streaming link instead.`,
-        },
-        { status: 400 },
-      );
-    }
-    totalBytes += file.size;
-  }
-  if (totalBytes > MAX_TOTAL_BYTES) {
+  if (totalFileBytes(files) > MAX_UPLOAD_BYTES) {
     return Response.json(
       {
-        error:
-          "Uploaded files are too large overall (20MB max combined). Please use a streaming link instead.",
+        error: `Uploaded files add up to more than ${MAX_UPLOAD_LABEL}. Please share a link to your music instead.`,
       },
       { status: 400 },
     );
@@ -128,7 +120,10 @@ export async function POST(request: Request) {
       attachments: attachments.length > 0 ? attachments : undefined,
     });
   } catch (error) {
-    console.error("SendGrid artist submission send failed", error);
+    console.error(
+      "SendGrid artist submission send failed",
+      describeSendGridError(error),
+    );
     return Response.json(
       { error: "Could not submit right now. Please try again." },
       { status: 502 },
@@ -142,7 +137,10 @@ export async function POST(request: Request) {
       buildConfirmationEmail({ fromEmail, fullName, artistName, email }),
     );
   } catch (error) {
-    console.error("SendGrid artist confirmation email failed", error);
+    console.error(
+      "SendGrid artist confirmation email failed",
+      describeSendGridError(error),
+    );
   }
 
   return Response.json({ ok: true });

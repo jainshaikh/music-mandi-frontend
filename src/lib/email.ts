@@ -11,6 +11,20 @@ export function getSendGridConfig(toEnvVar: string) {
   return { fromEmail, toEmail };
 }
 
+// SendGrid's ResponseError keeps the reason (e.g. "The from address does not
+// match a verified Sender Identity") in `response.body.errors`, which
+// console.error prints as `[Array]` — so the logs never said why a send failed.
+export function describeSendGridError(error: unknown) {
+  if (typeof error === "object" && error !== null && "response" in error) {
+    const { code, response } = error as {
+      code?: number;
+      response?: { body?: unknown };
+    };
+    return `status ${code ?? "unknown"}: ${JSON.stringify(response?.body)}`;
+  }
+  return error;
+}
+
 export function escapeHtml(value: string): string {
   return value
     .replace(/&/g, "&amp;")

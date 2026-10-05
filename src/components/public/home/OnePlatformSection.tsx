@@ -56,10 +56,6 @@ function DashboardMock() {
       ref={wrapRef}
       className="relative mt-16 flex justify-center py-8 perspective-distant"
     >
-      <div className="from-mm-brand-1 to-mm-brand-2 absolute top-8 -left-2 z-10 -rotate-6 rounded-full bg-linear-to-r px-4 py-2 text-xs font-semibold text-white shadow-lg sm:top-12 sm:left-4">
-        100+ Platforms / Worldwide
-      </div>
-
       <div
         ref={cardRef}
         id="dashboard"
@@ -159,6 +155,13 @@ function DashboardMock() {
         </div>
       </div>
 
+      {/* Both badges come after the 3D-rotated panel on purpose: some engines
+          (Safari) depth-sort transformed siblings inside a perspective
+          context regardless of z-index, which hid this one behind the panel
+          (QA BUG-06). Later in the DOM paints on top everywhere. */}
+      <div className="from-mm-brand-1 to-mm-brand-2 absolute top-8 -left-2 z-10 -rotate-6 rounded-full bg-linear-to-r px-4 py-2 text-xs font-semibold text-white shadow-lg sm:top-12 sm:left-4">
+        100+ Platforms / Worldwide
+      </div>
       <div className="absolute right-0 bottom-4 rotate-6 rounded-full bg-linear-to-r from-violet-600 to-pink-600 px-4 py-2 text-xs font-semibold text-white shadow-lg sm:right-4">
         Royalties / Auditable
       </div>

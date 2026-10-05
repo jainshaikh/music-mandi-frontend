@@ -10,6 +10,7 @@ type FieldProps = {
   error?: string;
   full?: boolean;
   placeholder?: string;
+  autoComplete?: string;
   value?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 };
@@ -23,6 +24,7 @@ export default function Field({
   error = "Check this field.",
   full = false,
   placeholder,
+  autoComplete,
   value,
   onChange,
 }: FieldProps) {
@@ -35,6 +37,7 @@ export default function Field({
         type={type}
         required={required}
         placeholder={placeholder}
+        autoComplete={autoComplete}
         value={value}
         onChange={onChange}
       />

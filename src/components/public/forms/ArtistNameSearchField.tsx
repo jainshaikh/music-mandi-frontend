@@ -23,21 +23,15 @@ export default function ArtistNameSearchField({
   const [results, setResults] = useState<SpotifySearchArtist[]>([]);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const rootRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    if (!open) return;
-    const onPointerDown = (e: MouseEvent) => {
-      if (rootRef.current && !rootRef.current.contains(e.target as Node))
-        setOpen(false);
-    };
-    document.addEventListener("mousedown", onPointerDown);
-    return () => document.removeEventListener("mousedown", onPointerDown);
-  }, [open]);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  // The list floats over the Phone/Genre fields below, so it must only be
+  // open while this input has focus — otherwise a click meant for those
+  // fields lands on an artist and silently fills in the Spotify link.
+  const selectedNameRef = useRef<string | null>(null);
 
   useEffect(() => {
     const q = value.trim();
-    if (q.length < 2) return;
+    if (q.length < 2 || q === selectedNameRef.current) return;
 
     const controller = new AbortController();
     const timer = setTimeout(async () => {
@@ -50,7 +44,7 @@ export default function ArtistNameSearchField({
         if (!res.ok) throw new Error();
         const data = await res.json();
         setResults(data.artists ?? []);
-        setOpen(true);
+        if (document.activeElement === inputRef.current) setOpen(true);
       } catch {
         // Search is a convenience on top of a free-text field, not a
         // requirement — a failed/aborted lookup just leaves the list empty.
@@ -70,7 +64,7 @@ export default function ArtistNameSearchField({
     query.length >= 2 && open && (loading || results.length > 0);
 
   return (
-    <div className={cn("field", styles["artist-search-field"])} ref={rootRef}>
+    <div className={cn("field", styles["artist-search-field"])}>
       <label htmlFor="artistName">Artist or band name</label>
       <input
         id="artistName"
@@ -80,7 +74,15 @@ export default function ArtistNameSearchField({
         autoComplete="off"
         required
         onChange={(e) => onValueChange(e.target.value)}
-        onFocus={() => results.length > 0 && setOpen(true)}
+        onFocus={() => {
+          if (results.length > 0 && query !== selectedNameRef.current)
+            setOpen(true);
+        }}
+        onBlur={() => setOpen(false)}
+        onKeyDown={(e) => {
+          if (e.key === "Escape") setOpen(false);
+        }}
+        ref={inputRef}
       />
       {showDropdown ? (
         <ul className={styles["artist-search-results"]}>
@@ -93,7 +95,11 @@ export default function ArtistNameSearchField({
               <li key={artist.id}>
                 <button
                   type="button"
+                  // Keeps focus in the input, so its onBlur doesn't close
+                  // the list before this click registers.
+                  onMouseDown={(e) => e.preventDefault()}
                   onClick={() => {
+                    selectedNameRef.current = artist.name;
                     onValueChange(artist.name);
                     onSelectArtist(artist);
                     setOpen(false);

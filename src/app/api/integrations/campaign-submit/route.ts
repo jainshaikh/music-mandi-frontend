@@ -1,12 +1,14 @@
-import { escapeHtml, getSendGridConfig, sgMail } from "@/lib/email";
+import {
+  describeSendGridError,
+  escapeHtml,
+  getSendGridConfig,
+  sgMail,
+} from "@/lib/email";
+import { MAX_UPLOAD_BYTES, MAX_UPLOAD_LABEL } from "@/lib/formSubmission";
 import { formatPKR } from "@/lib/sellerAds";
 
 // Interim, frontend-hosted implementation — see docs/DECISIONS.md DEC-017.
 // Ported from music_mandi-website's own working /api/integrations/campaign-submit.
-
-// Kept comfortably under SendGrid's ~30MB total message size — attachments
-// are base64'd before sending, which inflates raw bytes by roughly a third.
-const MAX_AUDIO_BYTES = 15 * 1024 * 1024;
 
 export async function POST(request: Request) {
   const config = getSendGridConfig("ADS_TO_EMAIL");
@@ -57,10 +59,10 @@ export async function POST(request: Request) {
   const audioFile = formData.get("audio");
   const audio =
     audioFile instanceof File && audioFile.size > 0 ? audioFile : null;
-  if (audio && audio.size > MAX_AUDIO_BYTES) {
+  if (audio && audio.size > MAX_UPLOAD_BYTES) {
     return Response.json(
       {
-        error: `"${audio.name}" is larger than 15MB. Please use a smaller file.`,
+        error: `"${audio.name}" is larger than ${MAX_UPLOAD_LABEL}. Please use a smaller file.`,
       },
       { status: 400 },
     );
@@ -118,7 +120,10 @@ export async function POST(request: Request) {
       attachments,
     });
   } catch (error) {
-    console.error("SendGrid campaign submission send failed", error);
+    console.error(
+      "SendGrid campaign submission send failed",
+      describeSendGridError(error),
+    );
     return Response.json(
       { error: "Could not submit right now. Please try again." },
       { status: 502 },
@@ -138,7 +143,10 @@ export async function POST(request: Request) {
       }),
     );
   } catch (error) {
-    console.error("SendGrid campaign confirmation email failed", error);
+    console.error(
+      "SendGrid campaign confirmation email failed",
+      describeSendGridError(error),
+    );
   }
 
   return Response.json({ ok: true });

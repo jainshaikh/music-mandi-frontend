@@ -25,6 +25,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
+      // The public site sets `scroll-behavior: smooth` for in-page anchors;
+      // this tells Next.js to switch it off during route changes so a new
+      // page starts at the top instantly instead of animating there.
+      data-scroll-behavior="smooth"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">{children}</body>

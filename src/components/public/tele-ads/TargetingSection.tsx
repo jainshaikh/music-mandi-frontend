@@ -32,10 +32,12 @@ const CARDS = [
 ] as const;
 
 export default function TargetingSection() {
-  const { chips, chipLabels, toggleChip, estimateText } = useTeleAds();
+  const { chips, chipLabels, chipLocked, toggleChip, estimateText } =
+    useTeleAds();
 
   return (
     <section
+      data-pause-offscreen
       className={cn(styles["targeting-new"], styles["restored-targeting"])}
     >
       <div className={styles["targeting-copy"]}>
@@ -53,6 +55,7 @@ export default function TargetingSection() {
               className={chips[i] ? styles.on : ""}
               onClick={() => toggleChip(i)}
               aria-pressed={chips[i]}
+              disabled={chipLocked[i]}
             >
               {label}
             </button>

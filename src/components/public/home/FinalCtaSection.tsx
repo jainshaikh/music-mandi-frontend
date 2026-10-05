@@ -6,6 +6,7 @@ export default function FinalCtaSection() {
   return (
     <section
       id="final"
+      data-pause-offscreen
       className="from-mm-brand-1 via-mm-brand-2 to-mm-brand-3 sm:p-mm-gutter relative flex min-h-130 items-center justify-center bg-linear-to-br px-4.5 py-17.5 text-center text-white sm:min-h-150"
     >
       <div className="animate-mm-disc-spin w-mm-final-disc h-mm-final-disc absolute top-[10%] left-[6%] hidden overflow-hidden rounded-full sm:block">

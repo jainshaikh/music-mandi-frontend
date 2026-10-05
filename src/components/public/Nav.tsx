@@ -2,18 +2,25 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 export default function Nav() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [navCompact, setNavCompact] = useState(false);
+  const compactSentinelRef = useRef<HTMLDivElement | null>(null);
 
-  // Nav compact state past 80px scroll.
+  // Nav compact state past 80px scroll. Watches a 1px marker at 80px instead
+  // of reading `scrollY` on every scroll event, which forced a synchronous
+  // layout each time and was the single biggest scroll cost (QA BUG-03).
   useEffect(() => {
-    const onScroll = () => setNavCompact(scrollY > 80);
-    addEventListener("scroll", onScroll, { passive: true });
-    return () => removeEventListener("scroll", onScroll);
+    const sentinel = compactSentinelRef.current;
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(([entry]) =>
+      setNavCompact(!entry.isIntersecting),
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -83,9 +90,15 @@ export default function Nav() {
           &#9776;
         </button>
       </nav>
+      <div
+        ref={compactSentinelRef}
+        aria-hidden="true"
+        className="pointer-events-none absolute top-20 left-0 h-px w-px"
+      />
 
       <div
         id="mobileMenu"
+        data-lenis-prevent
         className={cn(
           "z-mm-menu bg-mm-ink px-mm-gutter pb-mm-gutter pt-mm-2xl text-mm-paper max-mm-md:flex max-mm-md:overflow-x-hidden max-mm-md:overflow-y-auto fixed inset-0 hidden h-dvh max-h-dvh flex-col overflow-hidden",
           mobileOpen

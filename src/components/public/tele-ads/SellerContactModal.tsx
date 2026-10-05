@@ -19,10 +19,12 @@ export default function SellerContactModal({
   onClose,
   onSubmit,
   submitting = false,
+  error,
 }: {
   onClose: () => void;
   onSubmit: (input: SellerContactInput) => void;
   submitting?: boolean;
+  error?: string;
 }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -107,6 +109,11 @@ export default function SellerContactModal({
               />
             </div>
           </div>
+          {error ? (
+            <p role="alert" className="mt-4 text-sm text-rose-400">
+              {error}
+            </p>
+          ) : null}
           <button
             className="btn fill"
             type="submit"

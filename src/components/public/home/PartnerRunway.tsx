@@ -32,7 +32,10 @@ const LOGOS: Logo[] = [
 export default function PartnerRunway() {
   const doubled = [...LOGOS, ...LOGOS];
   return (
-    <section className="bg-mm-navy relative flex min-h-57.5 items-center overflow-hidden border-t border-b border-white/8 text-white">
+    <section
+      data-pause-offscreen
+      className="bg-mm-navy relative flex min-h-57.5 items-center overflow-hidden border-t border-b border-white/8 text-white"
+    >
       <div className="eyebrow left-mm-gutter max-mm-sm:top-6 max-mm-sm:left-4.5 absolute top-7">
         Distribution and promotion partners
       </div>

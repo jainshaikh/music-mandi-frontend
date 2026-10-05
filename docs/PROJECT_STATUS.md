@@ -412,6 +412,24 @@ Implemented:
   broken until hydration), splash screen removed (user decision), unused
   Geist font preloads off, immutable caching for `/assets/*`, oversized
   logo sources resized. Slow-4G LCP 4.3 s → 1.8 s, CLS 0.23 → 0.
+- QA bug report (23–24 Sep 2026, 13 bugs) — fixing one at a time:
+  - BUG-11/12 (form submissions 502): done in code (DEC-039) — forms keep
+    the user's input on failure, show the reason inline, enforce the real
+    4 MB upload limit; SendGrid's rejection reason now reaches the logs.
+    Root cause is production SendGrid config — Vercel env check pending
+    with the project owner.
+  - BUG-02 (Spotify auto-fill), BUG-01 (Genre/City dropdown layout),
+    BUG-08 (audio ad required): done (DEC-039).
+  - BUG-05 (scroll jumps/gets stuck) and BUG-03 (animation load: nav
+    scroll listener, off-screen animations, cursor loop, carousel scroll
+    handler, hero/TELE ADs video pausing, reduced motion): done (DEC-040).
+  - BUG-09 (audience estimate + overlapping cards), BUG-10 (tags looked
+    clickable), BUG-06 (badge layering), BUG-07 (Nine Systems cards now
+    informational, active card always visible): done (DEC-041).
+  - BUG-13 (mobile hero cropped): done — stacked phone layout with the
+    full 16:9 frame (DEC-042).
+  - BUG-04 (footer social links): pending — needs the official profile
+    URLs from the project owner.
 In Progress:
 - Migrating the remaining public pages from music_mandi-website (labels,
   tamasha (+pitch), 4 legal pages, login) — not started yet

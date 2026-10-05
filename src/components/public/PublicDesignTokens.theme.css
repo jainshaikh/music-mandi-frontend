@@ -63,7 +63,6 @@
   --spacing-mm-slide-shift: 4%;
   --spacing-mm-hero-copy: min(800px, 58vw);
   --spacing-mm-hero-copy-md: min(760px, 78vw);
-  --spacing-mm-hero-copy-sm: 94vw;
   --spacing-mm-hero-pad: 0.08em;
 
   --radius-mm-pill: 20px;
@@ -221,12 +220,6 @@
       rgba(5, 7, 12, 0.16) 100%
     ),
     linear-gradient(180deg, rgba(5, 7, 12, 0.34), rgba(5, 7, 12, 0.22));
-}
-
-@utility bg-mm-hero-shade-sm {
-  background-image:
-    linear-gradient(90deg, rgba(5, 7, 12, 0.91), rgba(5, 7, 12, 0.57)),
-    linear-gradient(180deg, rgba(5, 7, 12, 0.16), rgba(5, 7, 12, 0.4));
 }
 
 @utility text-shadow-mm-hero {

@@ -4,6 +4,7 @@ import SmoothScroll from "@/components/public/SmoothScroll";
 import AnnouncementBar from "@/components/public/AnnouncementBar";
 import Nav from "@/components/public/Nav";
 import CustomCursor from "@/components/public/CustomCursor";
+import PauseOffscreenAnimations from "@/components/public/PauseOffscreenAnimations";
 import Footer from "@/components/public/Footer";
 import Toast from "@/components/public/Toast";
 
@@ -23,6 +24,7 @@ export default function PublicLayout({
   return (
     <div className="mm-public">
       <SmoothScroll />
+      <PauseOffscreenAnimations />
       <AnnouncementBar />
       <Nav />
       <CustomCursor />

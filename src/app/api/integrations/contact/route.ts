@@ -1,4 +1,9 @@
-import { escapeHtml, getSendGridConfig, sgMail } from "@/lib/email";
+import {
+  describeSendGridError,
+  escapeHtml,
+  getSendGridConfig,
+  sgMail,
+} from "@/lib/email";
 import { detectBot, ELAPSED_FIELD, HONEYPOT_FIELD } from "@/lib/formGuard";
 
 // Interim, frontend-hosted implementation — see docs/DECISIONS.md DEC-017.
@@ -91,7 +96,7 @@ export async function POST(request: Request) {
         .join("\n"),
     });
   } catch (error) {
-    console.error("SendGrid send failed", error);
+    console.error("SendGrid send failed", describeSendGridError(error));
     return Response.json(
       { error: "Could not send your message. Please try again." },
       { status: 502 },
@@ -104,7 +109,10 @@ export async function POST(request: Request) {
   try {
     await sgMail.send(buildConfirmationEmail({ fromEmail, email, topic }));
   } catch (error) {
-    console.error("SendGrid confirmation email failed", error);
+    console.error(
+      "SendGrid confirmation email failed",
+      describeSendGridError(error),
+    );
   }
 
   return Response.json({ ok: true });

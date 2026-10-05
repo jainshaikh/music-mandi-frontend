@@ -2,7 +2,12 @@
 
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-import { showToast } from "@/lib/toast";
+import {
+  MAX_UPLOAD_BYTES,
+  MAX_UPLOAD_LABEL,
+  SUBMIT_FALLBACK_ERROR,
+  submissionErrorMessage,
+} from "@/lib/formSubmission";
 import {
   DEFAULT_DRAFT_CAMPAIGN,
   formatPKR,
@@ -36,6 +41,7 @@ const GENDERS = ["Everyone", "Men", "Women"];
 const AGE_MIN = 18;
 const AGE_MAX = 65;
 const STEPS = ["Setup", "Budget", "Audience", "Creative", "Review"];
+const CREATIVE_STEP = STEPS.indexOf("Creative");
 const ADVANCED_TARGETING_CHIPS = [
   "Prepaid",
   "Postpaid",
@@ -66,9 +72,12 @@ export default function CampaignBuilder() {
   const [step, setStep] = useState(0);
   const [budgetMode, setBudgetMode] = useState<"total" | "daily">("total");
   const [audioFile, setAudioFile] = useState<File | null>(null);
+  const [audioError, setAudioError] = useState("");
+  const [submitError, setSubmitError] = useState("");
 
   const budgetInputRef = useRef<HTMLInputElement>(null);
   const audioFileRef = useRef<HTMLInputElement>(null);
+  const audioBoxRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
@@ -153,7 +162,25 @@ export default function CampaignBuilder() {
   // letting the wizard advance.
   const goNext = () => {
     if (formRef.current && !formRef.current.reportValidity()) return;
+    if (step === CREATIVE_STEP && !requireAudio()) return;
     setStep((s) => Math.min(STEPS.length - 1, s + 1));
+  };
+
+  // The audio ad is required, but its input is a hidden file picker, so the
+  // browser's own `required` message can't show — and a restored draft can
+  // say "uploaded" while the File itself wasn't kept between visits.
+  const requireAudio = () => {
+    if (audioFile) return true;
+    setAudioError(
+      campaign.audio
+        ? "Please upload your audio ad again — files aren't kept between visits."
+        : "Please upload your audio ad to continue.",
+    );
+    audioBoxRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+    return false;
   };
 
   const goBack = () => {
@@ -177,7 +204,10 @@ export default function CampaignBuilder() {
     const reachHigh = Math.min(potential, 0.92 * spend);
     let strength: string;
     let tip: string;
-    if (potential < 1.5) {
+    if (step >= CREATIVE_STEP && !audioFile) {
+      strength = "Needs audio";
+      tip = "Upload your audio ad — a campaign can't run without one.";
+    } else if (potential < 1.5) {
       strength = "Narrow";
       tip = "Widen your audience to improve delivery.";
     } else if (campaign.budget >= 750000) {
@@ -198,7 +228,14 @@ export default function CampaignBuilder() {
       strength,
       tip,
     };
-  }, [campaign.ageMin, campaign.ageMax, campaign.budget, campaign.location]);
+  }, [
+    campaign.ageMin,
+    campaign.ageMax,
+    campaign.budget,
+    campaign.location,
+    step,
+    audioFile,
+  ]);
 
   const ageLabel =
     campaign.ageMax >= AGE_MAX
@@ -247,6 +284,13 @@ export default function CampaignBuilder() {
   const onAudioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (file.size > MAX_UPLOAD_BYTES) {
+      setAudioError(
+        `This file is larger than ${MAX_UPLOAD_LABEL}. Export it as an MP3 or trim it, then try again.`,
+      );
+      return;
+    }
+    setAudioError("");
     setCampaign((prev) => ({ ...prev, audio: true, audioName: file.name }));
     setAudioFile(file);
   };
@@ -254,6 +298,11 @@ export default function CampaignBuilder() {
   const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!policyChecked) return;
+    if (!audioFile) {
+      setStep(CREATIVE_STEP);
+      requireAudio();
+      return;
+    }
     setShowAccountModal(true);
   };
 
@@ -262,7 +311,9 @@ export default function CampaignBuilder() {
   // DEC-017), including the audio file (if any) as an email attachment.
   const onAccountSubmit = async (input: SellerContactInput) => {
     setSubmitting(true);
+    setSubmitError("");
 
+    let failure: string | null = null;
     try {
       const fd = new FormData();
       fd.append("advertiserName", input.name);
@@ -289,17 +340,13 @@ export default function CampaignBuilder() {
         method: "POST",
         body: fd,
       });
-      if (!res.ok) {
-        const data = await res.json().catch(() => null);
-        throw new Error(data?.error);
-      }
-    } catch (err) {
+      if (!res.ok) failure = await submissionErrorMessage(res);
+    } catch {
+      failure = SUBMIT_FALLBACK_ERROR;
+    }
+    if (failure) {
       setSubmitting(false);
-      showToast(
-        err instanceof Error && err.message
-          ? err.message
-          : "Could not submit right now. Please try again.",
-      );
+      setSubmitError(failure);
       return;
     }
 
@@ -735,11 +782,14 @@ export default function CampaignBuilder() {
                 <div className={styles["seller-stack"]}>
                   <div>
                     <span className="seller-label">Audio ad</span>
-                    <div className={styles["seller-upload"]}>
+                    <div className={styles["seller-upload"]} ref={audioBoxRef}>
                       {!campaign.audio ? (
                         <div id="sellerUploadIdle">
                           <b>Upload your audio ad</b>
-                          <p>MP3 or WAV, short form audio spot</p>
+                          <p>
+                            MP3 or WAV, short form audio spot, up to{" "}
+                            {MAX_UPLOAD_LABEL}
+                          </p>
                           <button
                             type="button"
                             className="btn"
@@ -787,6 +837,11 @@ export default function CampaignBuilder() {
                         </div>
                       )}
                     </div>
+                    {audioError ? (
+                      <p role="alert" className="mt-2! text-sm! text-rose-400!">
+                        {audioError}
+                      </p>
+                    ) : null}
                     <input
                       ref={audioFileRef}
                       id="sellerAudioFile"
@@ -1056,9 +1111,13 @@ export default function CampaignBuilder() {
       ) : null}
       {showAccountModal ? (
         <SellerContactModal
-          onClose={() => setShowAccountModal(false)}
+          onClose={() => {
+            setShowAccountModal(false);
+            setSubmitError("");
+          }}
           onSubmit={onAccountSubmit}
           submitting={submitting}
+          error={submitError}
         />
       ) : null}
     </div>

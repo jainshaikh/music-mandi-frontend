@@ -107,3 +107,25 @@ body:has(.mm-public)::before {
     cursor: auto;
   }
 }
+
+/* Set by PauseOffscreenAnimations while a [data-pause-offscreen] section is
+   out of view, so its infinite animations stop costing a style recalc every
+   frame. */
+.mm-public [data-offscreen],
+.mm-public [data-offscreen] * {
+  animation-play-state: paused !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mm-public *,
+  .mm-public *::before,
+  .mm-public *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}

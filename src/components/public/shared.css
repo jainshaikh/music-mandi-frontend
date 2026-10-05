@@ -171,16 +171,19 @@
   grid-column: 1/-1;
 }
 
-.mm-public .field label {
+/* Direct-child (`>`) on purpose: the bare descendant form also matched the
+   checkboxes/labels inside dropdown menus nested in a field (MultiSelectField,
+   CityPickerField) and out-ranked their own module styles — QA BUG-01. */
+.mm-public .field > label {
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: #aeb6c4;
 }
 
-.mm-public .field input,
-.mm-public .field textarea,
-.mm-public .field select {
+.mm-public .field > input,
+.mm-public .field > textarea,
+.mm-public .field > select {
   width: 100%;
   background: #090e18;
   color: #fff;
@@ -190,14 +193,14 @@
   outline: none;
 }
 
-.mm-public .field input:focus,
-.mm-public .field textarea:focus,
-.mm-public .field select:focus {
+.mm-public .field > input:focus,
+.mm-public .field > textarea:focus,
+.mm-public .field > select:focus {
   border-color: #ff4b83;
   box-shadow: 0 0 0 3px rgba(255, 25, 114, 0.12);
 }
 
-.mm-public .field textarea {
+.mm-public .field > textarea {
   min-height: 125px;
   resize: vertical;
 }
@@ -217,9 +220,9 @@
   display: block;
 }
 
-.mm-public .field.invalid input,
-.mm-public .field.invalid textarea,
-.mm-public .field.invalid select {
+.mm-public .field.invalid > input,
+.mm-public .field.invalid > textarea,
+.mm-public .field.invalid > select {
   border-color: #ff4f73;
 }
 
@@ -341,7 +344,7 @@
 /* Dark seller-ads/campaign-builder field style — distinct from the marketing
    `.field` above. Used bare by CampaignBuilder, DatePickerField,
    CityPickerField, and SellerContactModal. */
-.mm-public .seller-field label,
+.mm-public .seller-field > label,
 .mm-public .seller-label {
   display: block;
   font-size: 12px;
@@ -349,9 +352,9 @@
   margin-bottom: 7px;
 }
 
-.mm-public .seller-field input,
-.mm-public .seller-field select,
-.mm-public .seller-field textarea {
+.mm-public .seller-field > input,
+.mm-public .seller-field > select,
+.mm-public .seller-field > textarea {
   width: 100%;
   border: 1px solid rgba(255, 255, 255, 0.11);
   background: #090d16;
@@ -362,13 +365,15 @@
   color-scheme: dark;
 }
 
-.mm-public .seller-field input[type="date"]::-webkit-calendar-picker-indicator {
+.mm-public
+  .seller-field
+  > input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
 }
 
-.mm-public .seller-field input:focus,
-.mm-public .seller-field select:focus,
-.mm-public .seller-field textarea:focus {
+.mm-public .seller-field > input:focus,
+.mm-public .seller-field > select:focus,
+.mm-public .seller-field > textarea:focus {
   border-color: #ff4f84;
   box-shadow: 0 0 0 3px rgba(255, 25, 114, 0.08);
 }

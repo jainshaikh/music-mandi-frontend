@@ -6,6 +6,7 @@ import TeleHeroActions from "@/components/public/tele-ads/TeleHeroActions";
 import SampleAdInline from "@/components/public/tele-ads/SampleAdInline";
 import TargetingSection from "@/components/public/tele-ads/TargetingSection";
 import FaqAccordion from "@/components/public/FaqAccordion";
+import LazyVideo from "@/components/public/LazyVideo";
 import styles from "./page.module.css";
 
 const TITLE = 'Reach Pakistan in the Three Seconds Before "Hello"';
@@ -103,23 +104,13 @@ export default function TeleAdsPage() {
             styles["tele-video-detail-hero"],
           )}
         >
-          <video
+          <LazyVideo
             className={styles["tele-detail-bg-video"]}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            aria-hidden="true"
+            src="/assets/tele-ads-desktop.mp4"
+            mobileSrc="/assets/tele-ads-mobile.mp4"
             poster="/assets/tele-ads-desktop.webp"
-          >
-            <source
-              media="(max-width: 620px)"
-              src="/assets/tele-ads-mobile.mp4"
-              type="video/mp4"
-            />
-            <source src="/assets/tele-ads-desktop.mp4" type="video/mp4" />
-          </video>
+            eagerPoster
+          />
           <div className={styles["tele-detail-video-shade"]}></div>
           <div className={styles["tele-clean-copy"]}>
             <span className="route-kicker">A Music Mandi Product</span>
@@ -157,11 +148,11 @@ export default function TeleAdsPage() {
             ))}
             <article className={styles["precision-benefit"]}>
               <b>One placement. One measurable journey.</b>
-              <div className={styles["benefit-pills"]}>
+              <ul className={styles["benefit-pills"]}>
                 {BENEFIT_PILLS.map((pill) => (
-                  <i key={pill}>{pill}</i>
+                  <li key={pill}>{pill}</li>
                 ))}
-              </div>
+              </ul>
             </article>
           </div>
           <SampleAdInline />
@@ -174,11 +165,11 @@ export default function TeleAdsPage() {
             <span className="route-kicker">Built for</span>
             <h2>Campaigns that need reach and response.</h2>
           </div>
-          <div className={styles["usecase-row"]}>
+          <ul className={styles["usecase-row"]}>
             {USE_CASES.map((u) => (
-              <span key={u}>{u}</span>
+              <li key={u}>{u}</li>
             ))}
-          </div>
+          </ul>
           <div className={styles["spec-row"]}>
             {SPECS.map((s) => (
               <div key={s.b}>

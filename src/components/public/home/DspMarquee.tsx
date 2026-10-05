@@ -68,7 +68,10 @@ function Row({ reverse }: { reverse: boolean }) {
 
 export default function DspMarquee() {
   return (
-    <section className="bg-mm-navy sm:px-mm-gutter grid min-h-130 grid-cols-1 gap-10 px-6 py-14 text-white md:grid-cols-12 md:gap-16 md:py-24">
+    <section
+      data-pause-offscreen
+      className="bg-mm-navy sm:px-mm-gutter grid min-h-130 grid-cols-1 gap-10 px-6 py-14 text-white md:grid-cols-12 md:gap-16 md:py-24"
+    >
       <div className="flex flex-col justify-center md:col-span-4">
         <div className="eyebrow">Global distribution</div>
         <div className="text-7xl leading-none font-black tracking-tighter sm:text-8xl md:text-9xl">

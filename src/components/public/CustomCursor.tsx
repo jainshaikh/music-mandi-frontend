@@ -10,6 +10,7 @@ export default function CustomCursor() {
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (window.matchMedia("(pointer:coarse)").matches) return; // touch devices keep the native cursor
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const cursor = cursorRef.current;
     const ring = ringRef.current;
@@ -24,34 +25,44 @@ export default function CustomCursor() {
     let ry = my;
     let raf = 0;
 
+    // Positioned with `transform` (composited) rather than left/top, and the
+    // ring's easing loop stops once it has caught up — it used to run and
+    // trigger a style + layout pass every frame forever (QA BUG-03).
+    const place = (el: HTMLElement, x: number, y: number) => {
+      el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    };
+
+    const follow = () => {
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      if (Math.abs(mx - rx) < 0.5 && Math.abs(my - ry) < 0.5) {
+        rx = mx;
+        ry = my;
+        raf = 0;
+      } else {
+        raf = requestAnimationFrame(follow);
+      }
+      place(ring, rx, ry);
+    };
+
     const onMove = (e: PointerEvent) => {
       mx = e.clientX;
       my = e.clientY;
-      cursor.style.left = mx + "px";
-      cursor.style.top = my + "px";
+      place(cursor, mx, my);
+      if (!raf) raf = requestAnimationFrame(follow);
     };
     addEventListener("pointermove", onMove);
+    place(cursor, mx, my);
+    place(ring, rx, ry);
 
-    function follow() {
-      rx += (mx - rx) * 0.12;
-      ry += (my - ry) * 0.12;
-      if (ring) {
-        ring.style.left = rx + "px";
-        ring.style.top = ry + "px";
-      }
-      raf = requestAnimationFrame(follow);
-    }
-    follow();
-
-    // `.feature`/`#dashboard` are matched by literal DOM class/id here, not
-    // through Tailwind classes — this is a raw querySelector-style check, so
-    // it must match whatever literal marker is actually on the DOM (see
-    // SystemsCarousel's `cursor-hover-target` class and DashboardMock's
-    // `id="dashboard"`).
+    // `#dashboard` is matched by literal DOM id here, not through Tailwind
+    // classes — this is a raw closest() check, so it must match the literal
+    // marker on the DOM (DashboardMock's `id="dashboard"` in
+    // OnePlatformSection).
     const onOver = (e: MouseEvent) => {
       if (
         (e.target as HTMLElement)?.closest?.(
-          "a,button,.cursor-hover-target,#dashboard",
+          "a,button:not(:disabled),#dashboard",
         )
       ) {
         cursor.style.width = "44px";
@@ -61,7 +72,7 @@ export default function CustomCursor() {
     const onOut = (e: MouseEvent) => {
       if (
         (e.target as HTMLElement)?.closest?.(
-          "a,button,.cursor-hover-target,#dashboard",
+          "a,button:not(:disabled),#dashboard",
         )
       ) {
         cursor.style.width = "14px";

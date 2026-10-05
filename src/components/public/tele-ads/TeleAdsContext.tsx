@@ -1,21 +1,22 @@
 "use client";
 
 import { createContext, useContext, useMemo, useState, ReactNode } from "react";
+import {
+  AUDIENCE_FILTERS,
+  DEFAULT_SELECTION,
+  estimateAudience,
+  formatAudience,
+} from "./audienceEstimate";
 
-const CHIP_LABELS = [
-  "Pakistan",
-  "18 to 34",
-  "All genders",
-  "Smartphone",
-  "High data",
-];
-const BASE_ESTIMATE = 130;
+const CHIP_LABELS = AUDIENCE_FILTERS.map((f) => f.label);
+const CHIP_LOCKED = AUDIENCE_FILTERS.map((f) => Boolean(f.locked));
 
 type Ctx = {
   sampleVisible: boolean;
   showSample: () => void;
   chips: boolean[];
   chipLabels: string[];
+  chipLocked: boolean[];
   toggleChip: (i: number) => void;
   estimateText: string;
 };
@@ -24,27 +25,17 @@ const TeleAdsCtx = createContext<Ctx | null>(null);
 
 export function TeleAdsProvider({ children }: { children: ReactNode }) {
   const [sampleVisible, setSampleVisible] = useState(false);
-  const [chips, setChips] = useState<boolean[]>([
-    true,
-    false,
-    false,
-    false,
-    false,
-  ]);
-  const [interacted, setInteracted] = useState(false);
+  const [chips, setChips] = useState<boolean[]>(DEFAULT_SELECTION);
 
   const toggleChip = (i: number) => {
+    if (CHIP_LOCKED[i]) return;
     setChips((prev) => prev.map((v, idx) => (idx === i ? !v : v)));
-    setInteracted(true);
   };
 
-  const estimateText = useMemo(() => {
-    if (!interacted) return `${BASE_ESTIMATE}M`;
-    const active = chips.filter(Boolean).length;
-    const stepPerFilter = (BASE_ESTIMATE - 3.6) / chips.length;
-    const estimate = Math.max(3.6, BASE_ESTIMATE - active * stepPerFilter);
-    return `${estimate.toFixed(1)}M`;
-  }, [chips, interacted]);
+  const estimateText = useMemo(
+    () => formatAudience(estimateAudience(chips)),
+    [chips],
+  );
 
   return (
     <TeleAdsCtx.Provider
@@ -53,6 +44,7 @@ export function TeleAdsProvider({ children }: { children: ReactNode }) {
         showSample: () => setSampleVisible(true),
         chips,
         chipLabels: CHIP_LABELS,
+        chipLocked: CHIP_LOCKED,
         toggleChip,
         estimateText,
       }}
