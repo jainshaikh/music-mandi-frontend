@@ -448,3 +448,12 @@ Lightweight decision log. Do not create speculative decisions for requirements n
   1. Verified: at 390 px the media is a 390×219 band (exactly 16:9) starting under the nav; all three slides are 614 px tall (no jump between slides); on an iPhone 13 profile the `-640.mp4` video plays; no horizontal scroll. Desktop (1440 px) and tablet (768 px) hero screenshots are pixel-identical to before (PSNR ∞).
   2. Mobile hero video drops from 726 KB (portrait crops) to 454 KB for all three slides; posters 11–21 KB.
   3. The mobile hero is shorter than the viewport, so the partner logo strip now starts on the first screen on phones.
+
+**DEC-043: TELE ADs targeting — only "Pakistan" is locked; the other chips are toggles**
+
+- Date: 2026-10-06
+- Decision (project owner): the platform only sells Pakistani telecom inventory, so "Pakistan" stays permanently selected (disabled button) and is the full 180M audience. Every other chip — 18 to 34, All genders, Smartphone, High data — can be selected and deselected. Supersedes the DEC-041 rule that also locked "All genders". "All genders" starts on and keeps the full 180M whether it's on or off (Pakistan is 180M people regardless of gender); 18 to 34 (×0.55), Smartphone (×0.62) and High data (×0.40) narrow it. `audienceEstimate.ts` now marks the locked chip with `locked` and the starting state with `defaultOn`/`DEFAULT_SELECTION`, instead of inferring both from `factor === 1`.
+- Reason: owner request — users must be able to deselect any filter except the market itself; Pakistan + All genders is the whole 180M market.
+- Status: Accepted
+- Consequence:
+  1. Pakistan + All genders shows 180.0M; switching a narrowing filter on lowers the number and switching it off restores it; deterministic and monotonic as before. Tests: `src/tests/audienceEstimate.test.ts` (Pakistan is the only locked chip; default is 180.0M; All genders never changes the value; 18 to 34 / Smartphone / High data always lower it; monotonic over all 32 selections), `src/tests/e2e/site.spec.ts` (Pakistan disabled; All genders toggles off and stays 180M; 18 to 34 → Smartphone → High data each lower the estimate).

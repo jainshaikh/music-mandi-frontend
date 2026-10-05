@@ -59,9 +59,14 @@ test("BUG-09: targeting cards don't overlap and filters only narrow the estimate
   const value = async () => parseFloat((await estimate.textContent()) ?? "");
   const chips = page.locator('[class*="target-chipset"] button');
   await expect(chips.filter({ hasText: "Pakistan" })).toBeDisabled();
+  expect(await value()).toBe(180);
+  // Pakistan is 180M whatever the gender, so this toggles without narrowing.
+  const allGenders = chips.filter({ hasText: "All genders" });
+  await allGenders.click();
+  await expect(allGenders).toHaveAttribute("aria-pressed", "false");
+  expect(await value()).toBe(180);
   let previous = await value();
-  // "All genders" starts on, so clicking it narrows to a single gender.
-  for (const label of ["18 to 34", "All genders", "Smartphone", "High data"]) {
+  for (const label of ["18 to 34", "Smartphone", "High data"]) {
     await chips.filter({ hasText: label }).click();
     const next = await value();
     expect(next).toBeLessThan(previous);

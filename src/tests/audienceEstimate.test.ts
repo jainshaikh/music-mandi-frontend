@@ -25,21 +25,20 @@ describe("estimateAudience (QA BUG-09)", () => {
     ).toEqual(["Pakistan"]);
   });
 
-  it("changes the estimate when any chip except Pakistan is toggled", () => {
+  it("lowers the estimate when 18 to 34, Smartphone or High data is switched on", () => {
     for (const selection of allSelections()) {
-      AUDIENCE_FILTERS.forEach((filter, i) => {
-        if (filter.locked) return;
-        expect(estimateAudience(withChip(selection, i, true))).not.toBe(
+      for (const label of ["18 to 34", "Smartphone", "High data"]) {
+        const i = indexOf(label);
+        expect(estimateAudience(withChip(selection, i, true))).toBeLessThan(
           estimateAudience(withChip(selection, i, false)),
         );
-      });
+      }
     }
   });
 
-  it("never grows when a narrowing filter is switched on", () => {
+  it("never grows when any filter is switched on", () => {
     for (const selection of allSelections()) {
-      AUDIENCE_FILTERS.forEach((filter, i) => {
-        if (filter.offFactor !== undefined) return;
+      AUDIENCE_FILTERS.forEach((_, i) => {
         expect(
           estimateAudience(withChip(selection, i, true)),
         ).toBeLessThanOrEqual(estimateAudience(withChip(selection, i, false)));
@@ -47,10 +46,10 @@ describe("estimateAudience (QA BUG-09)", () => {
     }
   });
 
-  it("narrows to one gender when All genders is switched off", () => {
+  it("keeps the same audience whether All genders is on or off", () => {
     const i = indexOf("All genders");
     for (const selection of allSelections()) {
-      expect(estimateAudience(withChip(selection, i, false))).toBeLessThan(
+      expect(estimateAudience(withChip(selection, i, false))).toBe(
         estimateAudience(withChip(selection, i, true)),
       );
     }
@@ -61,9 +60,8 @@ describe("estimateAudience (QA BUG-09)", () => {
     expect(estimateAudience(selection)).toBe(estimateAudience([...selection]));
   });
 
-  it("starts at the base audience with the default selection", () => {
-    expect(formatAudience(estimateAudience(DEFAULT_SELECTION))).toBe(
-      formatAudience(BASE_AUDIENCE_MILLIONS),
-    );
+  it("shows the full 180M for Pakistan + All genders (the default)", () => {
+    expect(BASE_AUDIENCE_MILLIONS).toBe(180);
+    expect(formatAudience(estimateAudience(DEFAULT_SELECTION))).toBe("180.0M");
   });
 });
